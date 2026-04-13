@@ -30,6 +30,18 @@ if ! brew list zsh-autosuggestions &>/dev/null; then
   brew install zsh-autosuggestions
 fi
 
+# pnpm
+if ! command -v pnpm &>/dev/null; then
+  echo "Installing pnpm..."
+  curl -fsSL https://get.pnpm.io/install.sh | sh -
+fi
+
+# Vite+
+if [ ! -f "$HOME/.vite-plus/env" ]; then
+  echo "Installing Vite+..."
+  curl -fsSL https://vite.plus | bash
+fi
+
 # Home dotfiles
 link "$DOTFILES/.zshrc"            "$HOME/.zshrc"
 link "$DOTFILES/.zshenv"           "$HOME/.zshenv"
