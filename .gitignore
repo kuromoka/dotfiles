@@ -1,0 +1,8 @@
+# Machine-local secrets
+*.local
+
+# macOS
+.DS_Store
+
+# Karabiner の自動生成ファイル
+karabiner/automatic_backups/
