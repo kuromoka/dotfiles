@@ -1,6 +1,9 @@
 alias ll="ls -l"
 export PATH="$HOME/.local/bin:$PATH"
 
+# Rust
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 source ~/.zsh/git-prompt.sh
 fpath=(~/.zsh $fpath)
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
