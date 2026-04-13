@@ -30,6 +30,12 @@ if ! brew list zsh-autosuggestions &>/dev/null; then
   brew install zsh-autosuggestions
 fi
 
+# Rust
+if ! command -v rustup &>/dev/null; then
+  echo "Installing Rust..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
 # pnpm
 if ! command -v pnpm &>/dev/null; then
   echo "Installing pnpm..."
