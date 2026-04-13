@@ -62,5 +62,5 @@
     "example-skills@anthropic-agent-skills": true
   },
   "language": "japanese",
-  "model": "sonnet"
+  "model": "opusplan"
 }
