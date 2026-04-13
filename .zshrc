@@ -1,9 +1,6 @@
 alias ll="ls -l"
 export PATH="$HOME/.local/bin:$PATH"
 
-# Rust
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
 source ~/.zsh/git-prompt.sh
 fpath=(~/.zsh $fpath)
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
@@ -30,9 +27,6 @@ fpath=($HOME/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
-
-# Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"
 
 # Machine-local secrets (not tracked in git)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
