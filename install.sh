@@ -18,6 +18,18 @@ link() {
   echo "Linked: $dst -> $src"
 }
 
+# Homebrew
+if ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# zsh-autosuggestions
+if ! brew list zsh-autosuggestions &>/dev/null; then
+  echo "Installing zsh-autosuggestions..."
+  brew install zsh-autosuggestions
+fi
+
 # Home dotfiles
 link "$DOTFILES/.zshrc"            "$HOME/.zshrc"
 link "$DOTFILES/.zshenv"           "$HOME/.zshenv"
