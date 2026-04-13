@@ -61,8 +61,7 @@ link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.
 
 # Git 補完・プロンプトスクリプトをダウンロード
 echo "Downloading git-prompt.sh and git-completion.bash..."
-GIT_VERSION=$(git --version | awk '{print $3}')
-BASE_URL="https://raw.githubusercontent.com/git/git/v${GIT_VERSION}/contrib/completion"
+BASE_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion"
 mkdir -p "$HOME/.zsh"
 curl -fsSL "$BASE_URL/git-prompt.sh"       -o "$HOME/.zsh/git-prompt.sh"
 curl -fsSL "$BASE_URL/git-completion.bash" -o "$HOME/.zsh/git-completion.bash"
