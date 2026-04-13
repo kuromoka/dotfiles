@@ -37,7 +37,7 @@ if ! command -v pnpm &>/dev/null; then
 fi
 
 # Vite+
-if [ ! -f "$HOME/.vite-plus/env" ]; then
+if ! command -v vp &>/dev/null; then
   echo "Installing Vite+..."
   curl -fsSL https://vite.plus | bash
 fi
