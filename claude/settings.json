@@ -53,7 +53,6 @@
       "Write(~/.docker/config.json)"
     ]
   },
-  "model": "opusplan",
   "enableAllProjectMcpServers": true,
   "statusLine": {
     "type": "command",
@@ -63,5 +62,7 @@
     "example-skills@anthropic-agent-skills": true,
     "rust-analyzer-lsp@claude-plugins-official": true
   },
-  "language": "japanese"
+  "language": "japanese",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
 }
