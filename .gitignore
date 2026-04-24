@@ -6,3 +6,6 @@
 
 # Karabiner の自動生成ファイル
 karabiner/automatic_backups/
+
+# Claude Code のプロジェクトローカル設定
+.claude/settings.local.json
