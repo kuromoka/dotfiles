@@ -23,6 +23,28 @@ make_bar() {
   printf "%s" "$bar"
 }
 
+# Helper: format remaining time until a Unix epoch as "残XdYh" / "残XhYm" / "残Ym"
+format_remaining() {
+  target_epoch="$1"
+  [ -z "$target_epoch" ] && return
+  now_epoch=$(date +%s)
+  diff=$((target_epoch - now_epoch))
+  if [ "$diff" -le 0 ]; then
+    printf "残0m"
+    return
+  fi
+  days=$((diff / 86400))
+  hours=$(((diff % 86400) / 3600))
+  minutes=$(((diff % 3600) / 60))
+  if [ "$days" -gt 0 ]; then
+    printf "残%dd%dh" "$days" "$hours"
+  elif [ "$hours" -gt 0 ]; then
+    printf "残%dh%dm" "$hours" "$minutes"
+  else
+    printf "残%dm" "$minutes"
+  fi
+}
+
 # Git branch + dirty state (__git_ps1 風)
 git_branch=""
 git_dir=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
@@ -68,12 +90,18 @@ fi
 
 # Rate limit progress bars (5h and 7d)
 five=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 week=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+week_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 rate_str=""
 if [ -n "$five" ]; then
   five_int=$(printf '%.0f' "$five")
   five_bar=$(make_bar "$five" 10)
   rate_str="${rate_str}5h:[${five_bar}]${five_int}%"
+  five_left=$(format_remaining "$five_reset")
+  if [ -n "$five_left" ]; then
+    rate_str="${rate_str} ${five_left}"
+  fi
 fi
 if [ -n "$five" ] && [ -n "$week" ]; then
   rate_str="${rate_str} "
@@ -82,6 +110,10 @@ if [ -n "$week" ]; then
   week_int=$(printf '%.0f' "$week")
   week_bar=$(make_bar "$week" 10)
   rate_str="${rate_str}7d:[${week_bar}]${week_int}%"
+  week_left=$(format_remaining "$week_reset")
+  if [ -n "$week_left" ]; then
+    rate_str="${rate_str} ${week_left}"
+  fi
 fi
 
 # Context window progress bar
