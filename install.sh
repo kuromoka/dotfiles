@@ -59,7 +59,6 @@ link "$DOTFILES/.vimrc"            "$HOME/.vimrc"
 # ~/.config/*
 link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
 link "$DOTFILES/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
-link "$DOTFILES/zellij/config.kdl"        "$HOME/.config/zellij/config.kdl"
 
 # ~/.claude/*
 link "$DOTFILES/claude/settings.json"        "$HOME/.claude/settings.json"
