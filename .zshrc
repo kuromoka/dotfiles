@@ -28,6 +28,9 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
+# Prioritize Homebrew paths
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Machine-local secrets (not tracked in git)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
