@@ -29,3 +29,23 @@
 - 長時間ジョブが見込まれるときは `--background` をユーザーに提案する。
 - `codex` CLI 未認証だと判定されたら `/codex:setup` の実行を案内する。
 - `--model` はユーザー指定がない場合、デフォルトで `gpt-5.5` を使う（`--model gpt-5.5` を付与）。`spark` と言われたら `gpt-5.3-codex-spark` にマップ。`--effort` はユーザーが明示的に要求した場合のみ付ける。
+
+### Sonnet 限度切れ時の対応
+
+Claude Code の「あなたの組織の月次使用量限度に達した」エラーは、**モデル別の週間/月間制限に到達** した場合に発生することがある（Sonnet が 100% に達した場合など）。
+
+**対処法**：
+
+1. Claude Code の使用量画面（画面右側の「プラン使用制限」）で各モデルの使用率を確認
+2. **Sonnet が 100% に達している場合**、他のモデル（Opus 4.7 / Haiku）はまだ使用可能な場合がある
+3. Agent ツールで `model` パラメータを明示指定して、Sonnet 以外を使用：
+   ```javascript
+   Agent({
+     subagent_type: "codex:codex-rescue",
+     model: "opus", // Sonnet 代わりに Opus 4.7 を使用
+     prompt: "...",
+   });
+   ```
+4. `model` 値: `"opus"` = Opus 4.7 / `"haiku"` = Haiku 4.5
+
+**背景モード実行時も同様** — `run_in_background: true` + `model: "opus"` で指定可能。

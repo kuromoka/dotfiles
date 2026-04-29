@@ -60,9 +60,11 @@
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "codex@openai-codex": true
   },
   "language": "japanese",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "model": "haiku"
 }
