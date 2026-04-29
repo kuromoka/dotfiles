@@ -65,6 +65,5 @@
   },
   "language": "japanese",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "model": "haiku"
+  "agentPushNotifEnabled": true
 }
