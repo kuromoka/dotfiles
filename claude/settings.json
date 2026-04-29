@@ -64,18 +64,5 @@
   },
   "language": "japanese",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/opt/homebrew/bin/rtk hook claude"
-          }
-        ]
-      }
-    ]
-  }
+  "agentPushNotifEnabled": true
 }
