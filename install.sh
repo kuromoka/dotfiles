@@ -66,6 +66,7 @@ link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.
 link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
 link "$DOTFILES/claude/sonnet-delegate.md"    "$HOME/.claude/sonnet-delegate.md"
+link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
 
 # Git 補完・プロンプトスクリプトをダウンロード
 echo "Downloading git-prompt.sh and git-completion.bash..."
