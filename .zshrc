@@ -34,3 +34,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # Machine-local secrets (not tracked in git)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
+
+# opencode
+export PATH=~/.opencode/bin:$PATH
