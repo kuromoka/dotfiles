@@ -66,5 +66,8 @@
   "language": "japanese",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "model": "opus"
+  "model": "opus",
+  "worktree": {
+    "bgIsolation": "none"
+  }
 }
