@@ -55,6 +55,7 @@ link "$DOTFILES/.zprofile"         "$HOME/.zprofile"
 link "$DOTFILES/.gitconfig"        "$HOME/.gitconfig"
 link "$DOTFILES/.gitignore_global" "$HOME/.gitignore_global"
 link "$DOTFILES/.vimrc"            "$HOME/.vimrc"
+link "$DOTFILES/.tmux.conf"        "$HOME/.tmux.conf"
 
 # ~/.config/*
 link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
