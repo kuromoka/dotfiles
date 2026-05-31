@@ -1,4 +1,4 @@
-alias ll="ls -l"
+alias ll="ls -la"
 export PATH="$HOME/.local/bin:$PATH"
 
 source ~/.zsh/git-prompt.sh
