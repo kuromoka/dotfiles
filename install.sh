@@ -60,6 +60,7 @@ link "$DOTFILES/.tmux.conf"        "$HOME/.tmux.conf"
 # ~/.config/*
 link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
 link "$DOTFILES/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
 
 # ~/.claude/*
 link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"

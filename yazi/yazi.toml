@@ -1,0 +1,20 @@
+# yazi ファイルマネージャの設定
+# 全オプション一覧: https://yazi-rs.github.io/docs/configuration/yazi
+# 指定しないキーはデフォルト値がマージされるので、必要なものだけ書けばよい。
+
+[mgr]
+# ディレクトリを先頭にまとめる
+sort_dir_first = true
+# 自然順ソート（file1, file2, file10 の順）
+sort_by        = "natural"
+# 隠しファイルは既定で非表示（`.` キーでトグル可能）
+show_hidden    = false
+# シンボリックリンクのリンク先を表示
+show_symlink   = true
+# カーソル上下に最低限残す表示行数
+scrolloff      = 5
+
+[preview]
+tab_size   = 2
+max_width  = 600
+max_height = 900
