@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "auto",
     "deny": [
       "Read(~/.ssh/**)",
       "Edit(~/.ssh/**)",
@@ -53,7 +54,11 @@
       "Write(~/.docker/config.json)"
     ]
   },
+  "model": "claude-fable-5[1m]",
   "enableAllProjectMcpServers": true,
+  "worktree": {
+    "bgIsolation": "none"
+  },
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -65,9 +70,5 @@
   },
   "language": "japanese",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "model": "claude-fable-5[1m]",
-  "worktree": {
-    "bgIsolation": "none"
-  }
+  "agentPushNotifEnabled": true
 }
