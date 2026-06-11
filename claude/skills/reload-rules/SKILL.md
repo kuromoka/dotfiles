@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 1. `~/.claude/CLAUDE.md` — グローバル設定
 2. 上記の中で `@xxx.md` 構文で import されているファイル全て
-   （`@codex-rescue.md`、`@sonnet-delegate.md` 等）も再帰的に Read
+   （`@codex-rescue.md`、`@model-delegate.md` 等）も再帰的に Read
 3. プロジェクトルートの `CLAUDE.md`（存在すれば）
 4. プロジェクトの `.claude/CLAUDE.md`（存在すれば）
 
