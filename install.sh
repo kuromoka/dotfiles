@@ -68,6 +68,7 @@ link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.
 link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
 link "$DOTFILES/claude/model-delegate.md"     "$HOME/.claude/model-delegate.md"
+link "$DOTFILES/claude/new-project-stack.md"  "$HOME/.claude/new-project-stack.md"
 link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
 
 # Git 補完・プロンプトスクリプトをダウンロード
