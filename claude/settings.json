@@ -1,6 +1,5 @@
 {
   "permissions": {
-    "defaultMode": "auto",
     "deny": [
       "Read(~/.ssh/**)",
       "Edit(~/.ssh/**)",
@@ -52,9 +51,10 @@
       "Read(~/.docker/config.json)",
       "Edit(~/.docker/config.json)",
       "Write(~/.docker/config.json)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus[1m]",
   "enableAllProjectMcpServers": true,
   "worktree": {
     "bgIsolation": "none"
