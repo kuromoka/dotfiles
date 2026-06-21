@@ -62,14 +62,28 @@ link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
 link "$DOTFILES/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
 
+# ローカル上書きファイル（git 管理外）。無ければ雛形を作成
+if [ ! -f "$DOTFILES/claude/AGENTS.local.md" ]; then
+  cat > "$DOTFILES/claude/AGENTS.local.md" <<'LOCAL_EOF'
+# ローカル上書き（このマシン専用・git 管理外）
+# Claude Code / Codex 両方から読み込まれる。マシン固有のエージェント指示をここに書く。
+LOCAL_EOF
+  echo "Created: $DOTFILES/claude/AGENTS.local.md (machine-local, gitignored)"
+fi
+
 # ~/.claude/*
 link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"
 link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
+link "$DOTFILES/claude/AGENTS.md"             "$HOME/.claude/AGENTS.md"
+link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.claude/AGENTS.local.md"
 link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
 link "$DOTFILES/claude/model-delegate.md"     "$HOME/.claude/model-delegate.md"
-link "$DOTFILES/claude/new-project-stack.md"  "$HOME/.claude/new-project-stack.md"
 link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
+
+# ~/.codex/* — AGENTS.md（汎用ルール）と AGENTS.local.md（ローカル上書き）を Claude と共有
+link "$DOTFILES/claude/AGENTS.md"             "$HOME/.codex/AGENTS.md"
+link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.codex/AGENTS.local.md"
 
 # Git 補完・プロンプトスクリプトをダウンロード
 echo "Downloading git-prompt.sh and git-completion.bash..."

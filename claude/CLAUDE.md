@@ -1,3 +1,4 @@
+@AGENTS.md
 @codex-rescue.md
 @model-delegate.md
-@new-project-stack.md
+@AGENTS.local.md

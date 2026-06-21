@@ -31,16 +31,24 @@ bash install.sh
 
 ### claude/
 
-Claude Code 用の設定。`~/.claude/` 以下にリンクされる。
+Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされる（`AGENTS.md` は `~/.codex/` にも共有）。
 
 | ファイル | 内容 |
 |---|---|
 | `settings.json` | 本体設定（permission mode、deny ルール、モデル、プラグイン等） |
 | `statusline-command.sh` | ステータスライン表示スクリプト |
-| `CLAUDE.md` | グローバル指示（下記の各ルールを import） |
+| `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
+| `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
+| `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
+
+ローカル上書きの仕組み（ハイブリッド）:
+
+- **Claude Code**: `CLAUDE.md` が `@AGENTS.local.md` をネイティブ import（プロンプトに確実に展開）。
+- **Codex**: `@import` 非対応のため、共有 `AGENTS.md` に「Codex の場合は応答前に必ず `~/.codex/AGENTS.local.md` を読んで従え」と自然言語で指示し、エージェントがシェルで読み込む。
+- `AGENTS.local.md` は `.gitignore`（`*.local.md`）で除外。`install.sh` は無ければ雛形を自動生成する。
 
 ## 機密情報の扱い
 

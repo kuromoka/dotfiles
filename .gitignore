@@ -1,5 +1,6 @@
 # Machine-local secrets
 *.local
+*.local.md
 
 # macOS
 .DS_Store
