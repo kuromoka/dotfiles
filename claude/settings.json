@@ -55,6 +55,9 @@
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
+  "env": {
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "512000"
+  },
   "enableAllProjectMcpServers": true,
   "worktree": {
     "bgIsolation": "none"
@@ -70,5 +73,6 @@
   },
   "language": "japanese",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "skipWorkflowUsageWarning": true
 }
