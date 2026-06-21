@@ -8,6 +8,12 @@
 - Git の `name` / `email` は `.gitconfig` に書かない。`~/.gitconfig.local` に書き、`.gitconfig` では `[include] path = ~/.gitconfig.local` で読み込む。
 - `*.local` ファイルは `.gitignore` で除外済み。
 
+## ローカル専用ファイル（`*.local` 系）の扱い
+
+- `*.local` / `*.local.md` / `.claude/settings.local.json` などのローカル専用ファイルは `.gitignore` で除外済み。マシン固有・ローカル完結であり、リポジトリには含めない。
+- **これらに対する操作（作成・編集・リネーム等）や、これらに書く指示は、コミット・push しない**。ユーザーが明示的に要求した場合のみ例外とする。
+- ローカル専用ファイルを新規に作る場合は、`.gitignore` にマッチする名前（末尾 `.local` 等）にして tracked にならないようにする。
+
 ## パスの書き方
 
 - ユーザー名を含むパスをファイル内に書かない。`$HOME` または `~` を使う。
