@@ -80,7 +80,7 @@
 
 - デフォルトスタックで新規プロジェクトを作る際は、ループ雛形を `gh` で取得してプロジェクトルートに配置する:
   ```sh
-  tmp=$(mktemp -d) && gh repo clone kuromoka/dotfiles "$tmp" -- --depth 1 -q && cp -R "$tmp/claude/templates/loop/." . && rm -rf "$tmp"
+  tmp=$(mktemp -d) && gh repo clone kuromoka/dotfiles "$tmp" -- --depth 1 -q && cp -R "$tmp/templates/loop/." . && rm -rf "$tmp"
   ```
 - 配置物: `CLAUDE.md` / `feature_list.json` / `.claude/settings.json` / `.claude/agents/fixer.md`。
 

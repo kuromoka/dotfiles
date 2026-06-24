@@ -9,7 +9,7 @@
 新規プロジェクトのルートで実行:
 
 ```sh
-tmp=$(mktemp -d) && gh repo clone kuromoka/dotfiles "$tmp" -- --depth 1 -q && cp -R "$tmp/claude/templates/loop/." . && rm -rf "$tmp"
+tmp=$(mktemp -d) && gh repo clone kuromoka/dotfiles "$tmp" -- --depth 1 -q && cp -R "$tmp/templates/loop/." . && rm -rf "$tmp"
 ```
 
 展開されるもの:
