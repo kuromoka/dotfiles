@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && vp check || { echo 'vp check 失敗 — lint/型エラーを直すこと' >&2; exit 2; }",
+            "timeout": 120,
+            "statusMessage": "vp check 実行中..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && vp check && vp test || { echo 'vp check / vp test が失敗 — 完了前に緑にすること' >&2; exit 2; }",
+            "timeout": 600,
+            "statusMessage": "検証ゲート（vp check && vp test）..."
+          }
+        ]
+      }
+    ]
+  }
+}

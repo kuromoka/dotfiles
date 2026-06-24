@@ -1,0 +1,11 @@
+{
+  "project": "<project-name>",
+  "features": [
+    {
+      "id": "example-feature",
+      "description": "満たすべき要件を1つ、検証可能な粒度で書く",
+      "verify": "vp test -- <該当テスト>",
+      "passes": false
+    }
+  ]
+}

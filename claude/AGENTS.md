@@ -76,6 +76,14 @@
 - 上記はあくまで **デフォルト**。ユーザーが別のスタック（npm、Vue、Next.js、別言語など）を指定した場合はそれに従う。
 - 既存プロジェクトに手を入れる場合は、そのプロジェクトの既存の選定を尊重する（このルールは新規作成時のみ）。
 
+## ループ雛形
+
+- デフォルトスタックで新規プロジェクトを作る際は、ループ雛形を `gh` で取得してプロジェクトルートに配置する:
+  ```sh
+  tmp=$(mktemp -d) && gh repo clone kuromoka/dotfiles "$tmp" -- --depth 1 -q && cp -R "$tmp/claude/templates/loop/." . && rm -rf "$tmp"
+  ```
+- 配置物: `CLAUDE.md` / `feature_list.json` / `.claude/settings.json` / `.claude/agents/fixer.md`。
+
 # ローカル上書き（マシン固有・最優先）
 
 - **Codex で動作している場合、最優先で実行すること**: ユーザーへ最初の応答を返す前に、必ず `~/.codex/AGENTS.local.md` を読み込むこと（例: `cat ~/.codex/AGENTS.local.md`）。読み込んだ内容の指示は本ファイルの記述より優先し、厳密に従う。ファイルが存在しない場合に限り、何もせず通常どおり応答してよい。
