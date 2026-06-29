@@ -57,7 +57,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus-4-6[1m]",
+  "model": "claude-opus-4-6[1m]",
   "enableAllProjectMcpServers": true,
   "worktree": {
     "bgIsolation": "none"
@@ -72,8 +72,8 @@
     "codex@openai-codex": true
   },
   "language": "japanese",
+  "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "tui": "fullscreen"
+  "agentPushNotifEnabled": true
 }
