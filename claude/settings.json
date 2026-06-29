@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "512000"
+  },
   "permissions": {
     "deny": [
       "Read(~/.ssh/**)",
@@ -54,10 +57,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
-  "env": {
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "512000"
-  },
+  "model": "opus-4-6[1m]",
   "enableAllProjectMcpServers": true,
   "worktree": {
     "bgIsolation": "none"
@@ -72,7 +72,8 @@
     "codex@openai-codex": true
   },
   "language": "japanese",
+  "skipWorkflowUsageWarning": true,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipWorkflowUsageWarning": true
+  "tui": "fullscreen"
 }
