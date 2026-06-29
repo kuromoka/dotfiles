@@ -1,0 +1,8 @@
+name = "researcher"
+description = "読み込み主体の調査: ファイルスキャン、パターン検索、監査。多数のファイルを読む必要があるが判断自体は単純なタスクに使う。"
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"
+sandbox_mode = "read-only"
+developer_instructions = """
+徹底的に検索する。構造化された結果を返す。ファイルは一切変更しない。
+"""

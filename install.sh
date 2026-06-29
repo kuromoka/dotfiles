@@ -85,6 +85,10 @@ link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reloa
 link "$DOTFILES/claude/AGENTS.md"             "$HOME/.codex/AGENTS.md"
 link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.codex/AGENTS.local.md"
 
+# ~/.codex/agents/* — Codex agent profiles
+link "$DOTFILES/codex/agents/implementer.toml" "$HOME/.codex/agents/implementer.toml"
+link "$DOTFILES/codex/agents/researcher.toml"  "$HOME/.codex/agents/researcher.toml"
+
 # Git 補完・プロンプトスクリプトをダウンロード
 echo "Downloading git-prompt.sh and git-completion.bash..."
 BASE_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion"
