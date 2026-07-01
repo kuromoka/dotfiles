@@ -4,14 +4,13 @@
 
 ## 委譲先の決定
 
-メインモデル（このセッションを動かしているモデル）に応じて委譲先を切り替える：
+メインモデルに関わらず、委譲先は **Sonnet に固定**する。
 
-| メインモデル | 委譲先 | Agent の `model` 値 |
-|---|---|---|
-| Fable | Opus | `"opus"` |
-| Opus | Sonnet 4.6 | `"sonnet"` |
+| 委譲先 | Agent の `model` 値 |
+|---|---|
+| Sonnet | `"sonnet"` |
 
-以下、本文中の「下位モデル」は上記で決まる委譲先を指す。
+以下、本文中の「下位モデル」は Sonnet を指す。
 
 ## 自動委譲の判断（メインモデル側で判定。確認不要）
 
@@ -38,12 +37,12 @@
 
 ## 委譲フロー
 
-1. **ユーザーへの通知**: 委譲する旨を一言だけ伝える（確認は取らない）。例: 「実装は Opus に委譲します」「実装は Sonnet に委譲します」
+1. **ユーザーへの通知**: 委譲する旨を一言だけ伝える（確認は取らない）。例: 「実装は Sonnet に委譲します」
 2. **`Agent` ツールを呼ぶ**（`model` は上記の表に従う）:
    ```javascript
    Agent({
      subagent_type: "general-purpose",
-     model: "opus", // Fable がメインの場合。Opus がメインなら "sonnet"
+     model: "sonnet",
      description: "<3-5 word task>",
      prompt: "<self-contained briefing>",
    });

@@ -57,7 +57,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-opus-4-6[1m]",
+  "model": "claude-fable-5[1m]",
   "enableAllProjectMcpServers": true,
   "worktree": {
     "bgIsolation": "none"
