@@ -14,7 +14,7 @@ link() {
     echo "Backed up: $dst -> ${dst}.bak"
   fi
 
-  ln -sf "$src" "$dst"
+  ln -sfn "$src" "$dst"
   echo "Linked: $dst -> $src"
 }
 
@@ -59,7 +59,8 @@ link "$DOTFILES/.tmux.conf"        "$HOME/.tmux.conf"
 
 # ~/.config/*
 link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
-link "$DOTFILES/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+# Karabiner-Elements は保存時にファイルを rename で置き換えるため、ファイル単位のリンクは外れる。ディレクトリごとリンクする
+link "$DOTFILES/karabiner"                "$HOME/.config/karabiner"
 link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
 
 # ローカル上書きファイル（git 管理外）。無ければ雛形を作成

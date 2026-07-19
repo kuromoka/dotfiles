@@ -11,3 +11,6 @@ karabiner/automatic_backups/
 
 # Claude Code のプロジェクトローカル設定
 .claude/settings.local.json
+
+# Karabiner の GUI インポート済みルール（マシンローカル）
+karabiner/assets/
