@@ -27,6 +27,7 @@ bash install.sh
 | `ghostty/` | Ghostty（ターミナル）の設定 |
 | `karabiner/` | Karabiner-Elements（キーリマップ）の設定 |
 | `yazi/` | yazi（ファイラー）の設定 |
+| `herdr/` | herdr（エージェント多重化ターミナル）の設定 |
 | `claude/` | Claude Code の設定（下記） |
 | `codex/` | Codex CLI の設定（下記） |
 | `templates/` | プロジェクトへ配置する雛形（symlink せず `gh` で取得して使う）。`loop/` はループエンジニアリング用 |
