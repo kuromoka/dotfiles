@@ -1,0 +1,28 @@
+onboarding = false
+
+[terminal]
+default_shell = "zsh"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+a"
+
+[theme]
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+[ui.sound.agents]
+claude = "on"
+codex = "on"
+
+[session]
+resume_agents_on_restore = true
+
+[worktrees]
+directory = "~/.herdr/worktrees"

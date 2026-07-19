@@ -62,6 +62,7 @@ link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
 # Karabiner-Elements は保存時にファイルを rename で置き換えるため、ファイル単位のリンクは外れる。ディレクトリごとリンクする
 link "$DOTFILES/karabiner"                "$HOME/.config/karabiner"
 link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
+link "$DOTFILES/herdr/config.toml"        "$HOME/.config/herdr/config.toml"
 
 # ローカル上書きファイル（git 管理外）。無ければ雛形を作成
 if [ ! -f "$DOTFILES/claude/AGENTS.local.md" ]; then
