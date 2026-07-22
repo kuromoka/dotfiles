@@ -40,12 +40,15 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 |---|---|
 | `settings.json` | 本体設定（permission mode、deny ルール、モデル、プラグイン等） |
 | `statusline-command.sh` | ステータスライン表示スクリプト |
+| `hooks/usage-guard.sh` | 5時間ブロック使用量を ccusage で近似監視し、過去最大比が閾値（既定95%）超で「委譲専用モード」への切り替え指示を注入する UserPromptSubmit フック |
 | `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
 | `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
+
+> **Note**: `settings.json` の SessionStart フックが呼ぶ `~/.claude/hooks/herdr-agent-state.sh` は、`herdr integration install claude` で自動生成・管理されるスクリプト（herdr の再インストール時に上書きされる）。このリポジトリでは管理しないため、herdr を使う環境では別途上記コマンドで導入する。
 
 ローカル上書きの仕組み（ハイブリッド）:
 

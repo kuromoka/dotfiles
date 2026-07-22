@@ -76,6 +76,7 @@ fi
 # ~/.claude/*
 link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"
 link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+link "$DOTFILES/claude/hooks/usage-guard.sh"  "$HOME/.claude/hooks/usage-guard.sh"
 link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES/claude/AGENTS.md"             "$HOME/.claude/AGENTS.md"
 link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.claude/AGENTS.local.md"
