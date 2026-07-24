@@ -45,6 +45,7 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
 | `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
+| `opencode-rescue.md` | opencode CLI（`opencode run`）への手動委譲ルール。codex-rescue と同じ発想をプラグインなしで実現 |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
 

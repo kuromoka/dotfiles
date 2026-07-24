@@ -89,7 +89,8 @@
 | シグナル | 委譲先 |
 |---|---|
 | ユーザーが「codex に」「rescue で」と明示 | `codex:codex-rescue` |
+| ユーザーが「opencode に」「opencode で」と明示 | opencode（`opencode-rescue.md`） |
 | ユーザーが usage limit に近いと発言 | `codex:codex-rescue`（提案あり） |
 | 上記以外で、実装量が多く機械的なタスク | `general-purpose` + 下位モデル（自動・確認なし） |
 
-codex 委譲は **ユーザー明示シグナル時のみ・要確認**、下位モデル委譲は **メインモデル判断・自動** という非対称な運用。
+codex / opencode 委譲は **ユーザー明示シグナル時のみ・要確認**、下位モデル委譲は **メインモデル判断・自動** という非対称な運用。

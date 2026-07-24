@@ -81,6 +81,7 @@ link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES/claude/AGENTS.md"             "$HOME/.claude/AGENTS.md"
 link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.claude/AGENTS.local.md"
 link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
+link "$DOTFILES/claude/opencode-rescue.md"    "$HOME/.claude/opencode-rescue.md"
 link "$DOTFILES/claude/model-delegate.md"     "$HOME/.claude/model-delegate.md"
 link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
 
