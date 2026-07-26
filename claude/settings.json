@@ -47,18 +47,6 @@
           }
         ]
       }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -x \"$HOME/.claude/hooks/usage-guard.sh\" ] && bash \"$HOME/.claude/hooks/usage-guard.sh\" || true",
-            "timeout": 12
-          }
-        ]
-      }
     ]
   },
   "worktree": {

@@ -40,7 +40,6 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 |---|---|
 | `settings.json` | 本体設定（permission mode、deny ルール、モデル、プラグイン等） |
 | `statusline-command.sh` | ステータスライン表示スクリプト |
-| `hooks/usage-guard.sh` | 5時間ブロック使用量を ccusage で近似監視し、過去最大比が閾値（既定95%）超で「委譲専用モード」への切り替え指示を注入する UserPromptSubmit フック |
 | `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
 | `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
