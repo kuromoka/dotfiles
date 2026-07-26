@@ -1,7 +1,4 @@
 {
-  "env": {
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "512000"
-  },
   "permissions": {
     "deny": [
       "Read(~/.ssh/**)",
