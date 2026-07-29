@@ -10,6 +10,24 @@
 - GitHub とやり取りしないローカルリポジトリ操作には `git` を直接使う。
 - `git push --force` / `git push --force-with-lease` は、ユーザーが明示的に force push を要求した場合以外は使わない。
 
+## Web ページの取得
+
+- ページ取得はまず組み込みの Web 取得ツール（Claude Code の `WebFetch` 等）を使う。
+- 取得結果が本文として使えない場合は `agent-browser` CLI（`~/.vite-plus/bin/agent-browser`）にフォールバックする。判定条件は以下のいずれか:
+  - 中身がほぼ空、または骨組みだけの HTML が返る
+  - 「JavaScript を有効にしてください」等のメッセージだけが返る
+  - ページに見えているはずの本文が取得結果に含まれない
+- 手順:
+  ```sh
+  agent-browser open <url>
+  agent-browser get text body   # 本文テキスト
+  agent-browser snapshot        # 構造が必要なとき（アクセシビリティツリー）
+  ```
+- 描画が間に合わないときは `agent-browser wait <ms>` または `agent-browser wait <selector>` を挟んでから取得する。
+- ログインが必要なページは `--profile Default` を付けて Chrome のログイン状態を再利用する。
+- 一連の読み取りが終わったら `agent-browser close` でセッションを閉じる。
+- `agent-browser` は読み取り用途に限る。フォーム送信・投稿・購入などページ側に副作用を及ぼす操作は、実行前にユーザー確認を挟む。
+
 # ループエンジニアリング（自走の土台）
 
 ## 検証ループを閉じる（最重要）
