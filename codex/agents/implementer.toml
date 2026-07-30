@@ -1,6 +1,6 @@
 name = "implementer"
 description = "機械的な実装作業: 一括編集、スキャフォールド、マイグレーション、ボイラープレート。設計が決まっていて作業量が支配的なタスクに使う。"
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "medium"
 developer_instructions = """
 コードベースの既存パターンに従う。設計判断はしない — 曖昧な点は親エージェントに返す。

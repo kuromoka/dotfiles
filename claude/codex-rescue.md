@@ -73,6 +73,46 @@ python3 -c "import json;d=json.load(open('$D/<taskid>.json'));print(d['status'])
 - **予防**: 長時間化が見込まれるタスクは最初から Agent の `run_in_background: true` で投げ、
   上記の手順で結果を取りに行く前提で動く。
 
+## 長時間ジョブの投げ方
+
+10分を超えることが見込まれるタスクは、以下に従う。
+
+### 禁止
+
+- **`--background` を使わない**（プロンプト本文に書くのも、`task` に転送するのも不可）。
+  スクリプト側で解釈されるだけで、実際にプロセスを切り離すのは
+  Claude Code の `Bash(..., run_in_background: true)` の側。
+- **`--fresh` を付けずに投げない**。直前のスレッドが残っていると resume 扱いになり
+  （ジョブの title が `Codex Resume`）、そのスレッドが死んでいると起動直後に `failed`
+  になる（`pid: null`、ログはエラー本文なしの数行だけ）。
+- **サブエージェント経由で投げない**。サブエージェント側の Bash が10分で打ち切られ、
+  Codex の子プロセスも一緒に死ぬ。
+
+### 手順
+
+companion スクリプトを **Bash ツールの `run_in_background: true`** で直接叩く:
+
+```bash
+cat <prompt file> | node \
+  "$HOME/.claude/plugins/marketplaces/openai-codex/plugins/codex/scripts/codex-companion.mjs" \
+  task --fresh --model gpt-5.6-sol > <output file> 2>&1
+```
+
+- **プロンプトは stdin でパイプする**（`task` は prompt / prompt file / piped stdin /
+  `--resume-last` のいずれかを受け付ける）。
+- 読み取り専用にしたいときは `--write` を付けず、**プロンプト本文にも編集禁止を明記する**。
+- 完走すれば stdout に最終報告が出るので、出力ファイルを読む。
+
+### `task` の引数
+
+```
+task [--background] [--write] [--resume-last|--resume|--fresh]
+     [--model <model|spark>] [--effort <none|minimal|low|medium|high|xhigh>] [prompt]
+```
+
+`--help` は **タスク本文として Codex に渡ってしまう**。引数を確認するときは
+`scripts/codex-companion.mjs` の usage 行を直接読む。
+
 ## 出力の検証について（改変禁止と混同しない）
 
 「Codex の stdout を改変・要約しない」は**そのまま提示する**という意味であって、
@@ -87,9 +127,11 @@ python3 -c "import json;d=json.load(open('$D/<taskid>.json'));print(d['status'])
 ## 補足
 
 - 書き込み権限は **既定 ON**（`--write`）。読み取り専用にしたい場合のみ Agent プロンプトで明記する。
-- 長時間ジョブが見込まれるときは `--background` をユーザーに提案する。
+- **`--background` を使わない**（前述「長時間ジョブの投げ方」参照）。
 - `codex` CLI 未認証だと判定されたら `/codex:setup` の実行を案内する。
-- `--model` はユーザー指定がない場合、デフォルトで `gpt-5.5` を使う（`--model gpt-5.5` を付与）。`spark` と言われたら `gpt-5.3-codex-spark` にマップ。`--effort` はユーザーが明示的に要求した場合のみ付ける。
+- `--model` はユーザー指定がない場合、デフォルトで `gpt-5.6-sol` を使う（`--model gpt-5.6-sol` を付与）。`--effort` はユーザーが明示的に要求した場合のみ付ける。
+- モデル指定は GPT-5.6 ファミリーから選ぶ。`gpt-5.6-sol`（フラッグシップ / 品質優先）、`gpt-5.6-terra`（バランス）、`gpt-5.6-luna`（高スループット・低レイテンシ）。エイリアス `gpt-5.6` は sol にルーティングされる。
+- プラグイン側のエイリアス `spark`（`gpt-5.3-codex-spark`）は使わない。現行 CLI のモデル一覧に無い。
 
 ### Sonnet 限度切れ時の対応
 

@@ -62,10 +62,10 @@ Codex CLI 用の設定。`~/.codex/` 以下にリンクされる。
 
 | パス | 内容 |
 |---|---|
-| `agents/implementer.toml` | 機械的な実装用エージェントプロファイル（gpt-5.4 / medium effort）。一括編集・スキャフォールド・マイグレーション等 |
-| `agents/researcher.toml` | 読み込み主体の調査用エージェントプロファイル（gpt-5.4-mini / low effort / read-only） |
+| `agents/implementer.toml` | 機械的な実装用エージェントプロファイル（gpt-5.6-terra / medium effort）。一括編集・スキャフォールド・マイグレーション等 |
+| `agents/researcher.toml` | 読み込み主体の調査用エージェントプロファイル（gpt-5.6-luna / low effort / read-only） |
 
-メインモデル（gpt-5.5）から下位モデルへ実装・調査を委譲するためのプロファイル。Claude Code の `model-delegate.md` と同じ思想を Codex のプロファイル方式で実現する。
+メインモデル（gpt-5.6-sol）から下位モデルへ実装・調査を委譲するためのプロファイル。Claude Code の `model-delegate.md` と同じ思想を Codex のプロファイル方式で実現する。
 
 ## 機密情報の扱い
 
