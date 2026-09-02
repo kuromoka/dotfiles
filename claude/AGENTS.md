@@ -10,6 +10,21 @@
 - GitHub とやり取りしないローカルリポジトリ操作には `git` を直接使う。
 - `git push --force` / `git push --force-with-lease` は、ユーザーが明示的に force push を要求した場合以外は使わない。
 
+### public 公開前の秘匿情報チェック
+
+リポジトリを public にする前、public リポジトリへ push する前、および既存リポジトリを public に切り替える前に、以下をすべて確認する。ユーザーから依頼がなくても、public への公開が絡む操作では自発的に実施する。
+
+- コミット対象を列挙する（`git add -An --dry-run .`）。`.gitignore` の適用結果と、意図しないファイルが含まれていないかを確認する。
+- 認証情報のパターンを走査する: `api[_-]?key` / `secret` / `password` / `bearer` / `private key` / `BEGIN .*PRIVATE` / `ghp_` / `github_pat_` / `sk-` / `xox[baprs]-` / `AKIA` / `account_id` / `client_secret`。
+- メールアドレス、ローカル絶対パス（`/Users/` 等）、社内 URL、非公開ドキュメント（Notion・社内 wiki 等）の URL を走査する。
+- `.env` / `.dev.vars` / `*.pem` / `*.key` / `credentials` 等のファイルの有無を確認する。
+- 画像・PDF の EXIF / XMP / IPTC / GPS を確認する。
+- git 履歴（`git log` の全コミット）も対象にする。作業ツリーだけを見て済ませない。
+- 走査は lockfile と `node_modules/` を除外して行う。
+- 第三者から取得したファイル（スキル・テンプレート・ダウンロードした素材等）が含まれていないか確認し、含まれていれば除外を提案する。
+- コミットの著者名・メールアドレスが public に露出することをユーザーに伝え、noreply アドレスへ切り替えるかの判断を仰ぐ。git config はユーザーの承諾なく変更しない。
+- 検出結果は「該当なし」も含めて項目ごとに報告する。判断が必要なものは実施せずユーザーに確認する。
+
 ## Web ページの取得
 
 - ページ取得はまず組み込みの Web 取得ツール（Claude Code の `WebFetch` 等）を使う。
