@@ -20,6 +20,8 @@ bash install.sh
 
 | パス | 内容 |
 |---|---|
+| `AGENTS.md` | このリポジトリ固有のClaude Code / Codex共通ルール |
+| `CLAUDE.md` | `AGENTS.md`へのClaude Code互換symlink |
 | `.zshrc` / `.zshenv` / `.zprofile` | zsh の設定 |
 | `.gitconfig` / `.gitignore_global` | Git の設定 |
 | `.vimrc` | Vim の設定 |
