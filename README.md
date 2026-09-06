@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS 用の設定ファイル一式。`install.sh` がシンボリックリンクの作成と依存ツールのインストールを行う。
+macOS 用の設定ファイル一式。`install.sh` が設定ファイルの配置と依存ツールのインストールを行う。
 
 ## セットアップ
 
@@ -13,7 +13,8 @@ bash install.sh
 `install.sh` は以下を行う：
 
 - Homebrew / zsh-autosuggestions / Rust / pnpm / Vite+ のインストール（未導入の場合のみ）
-- 各設定ファイルをホームディレクトリへシンボリックリンク（既存ファイルは `.bak` にバックアップ）
+- ほとんどの設定ファイルをホームディレクトリへシンボリックリンク（既存ファイルは `.bak` にバックアップ）
+- Codexのカスタムエージェントを`~/.codex/agents/`へ通常ファイルとして同期（既存ファイルは連番付き `.bak` にバックアップ）
 - Git の補完・プロンプトスクリプトを `~/.zsh/` にダウンロード
 
 ## 構成
@@ -60,14 +61,21 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 
 ### codex/
 
-Codex CLI 用の設定。`~/.codex/` 以下にリンクされる。
+Codex CLI 用の設定。カスタムエージェントの TOML は `~/.codex/agents/` へ通常ファイルとして同期される。
 
 | パス | 内容 |
 |---|---|
 | `agents/implementer.toml` | 機械的な実装用エージェントプロファイル（gpt-5.6-terra / medium effort）。一括編集・スキャフォールド・マイグレーション等 |
 | `agents/researcher.toml` | 読み込み主体の調査用エージェントプロファイル（gpt-5.6-luna / low effort / read-only） |
+| `sync-agents.sh` | `agents/*.toml`を`~/.codex/agents/`へ通常ファイルとして同期 |
 
 メインモデル（gpt-5.6-sol）から下位モデルへ実装・調査を委譲するためのプロファイル。Claude Code の `model-delegate.md` と同じ思想を Codex のプロファイル方式で実現する。
+
+Codexのカスタムエージェントはsymlinkにせず、次のコマンドで同期する。プロファイルを変更した場合も再実行する。
+
+```sh
+./codex/sync-agents.sh
+```
 
 ## 機密情報の扱い
 
