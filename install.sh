@@ -37,6 +37,12 @@ if ! command -v rustup &>/dev/null; then
 fi
 
 # pnpm
+export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
 if ! command -v pnpm &>/dev/null; then
   echo "Installing pnpm..."
   curl -fsSL https://get.pnpm.io/install.sh | sh -
@@ -47,6 +53,14 @@ if ! command -v vp &>/dev/null; then
   echo "Installing Vite+..."
   curl -fsSL https://vite.plus | bash
 fi
+
+# Agent Skills
+echo "Installing/updating natural-japanese..."
+pnpm dlx skills add coji/natural-japanese \
+  --global \
+  --agent claude-code codex \
+  --skill natural-japanese \
+  --yes
 
 # Home dotfiles
 link "$DOTFILES/.zshrc"            "$HOME/.zshrc"
@@ -83,10 +97,12 @@ link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
 link "$DOTFILES/claude/opencode-rescue.md"    "$HOME/.claude/opencode-rescue.md"
 link "$DOTFILES/claude/model-delegate.md"     "$HOME/.claude/model-delegate.md"
 link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
+link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.claude/skills/kuromoka-writing"
 
 # ~/.codex/* — AGENTS.md（汎用ルール）と AGENTS.local.md（ローカル上書き）を Claude と共有
 link "$DOTFILES/claude/AGENTS.md"             "$HOME/.codex/AGENTS.md"
 link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.codex/AGENTS.local.md"
+link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.codex/skills/kuromoka-writing"
 
 # ~/.codex/agents/* — Codex agent profiles must be standalone files
 "$DOTFILES/codex/sync-agents.sh"

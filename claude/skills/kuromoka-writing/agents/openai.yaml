@@ -1,0 +1,4 @@
+interface:
+  display_name: "くろもか文体"
+  short_description: "過去のnote記事に近い、平易で具体的な日本語に整えます"
+  default_prompt: "$kuromoka-writing を使い、本人らしい平易な日本語で文章を書いてください。"

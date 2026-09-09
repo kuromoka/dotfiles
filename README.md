@@ -13,6 +13,7 @@ bash install.sh
 `install.sh` は以下を行う：
 
 - Homebrew / zsh-autosuggestions / Rust / pnpm / Vite+ のインストール（未導入の場合のみ）
+- [`natural-japanese`](https://github.com/coji/natural-japanese)スキルを取得し、Claude Code / Codexへインストール
 - ほとんどの設定ファイルをホームディレクトリへシンボリックリンク（既存ファイルは `.bak` にバックアップ）
 - Codexのカスタムエージェントを`~/.codex/agents/`へ通常ファイルとして同期（既存ファイルは連番付き `.bak` にバックアップ）
 - Git の補完・プロンプトスクリプトを `~/.zsh/` にダウンロード
@@ -43,13 +44,14 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 |---|---|
 | `settings.json` | 本体設定（permission mode、deny ルール、モデル、プラグイン等） |
 | `statusline-command.sh` | ステータスライン表示スクリプト |
-| `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
+| `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック・ユーザー名義の文章で使う文体スキル。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
 | `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
 | `opencode-rescue.md` | opencode CLI（`opencode run`）への手動委譲ルール。codex-rescue と同じ発想をプラグインなしで実現 |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
+| `skills/kuromoka-writing/` | 過去のnote記事と本人の希望をもとに、本人らしい日本語で書く共通スキル。`natural-japanese`は`install.sh`で外部から導入 |
 
 > **Note**: `settings.json` の SessionStart フックが呼ぶ `~/.claude/hooks/herdr-agent-state.sh` は、`herdr integration install claude` で自動生成・管理されるスクリプト（herdr の再インストール時に上書きされる）。このリポジトリでは管理しないため、herdr を使う環境では別途上記コマンドで導入する。
 
