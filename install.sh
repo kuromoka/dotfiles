@@ -104,6 +104,9 @@ link "$DOTFILES/claude/AGENTS.md"             "$HOME/.codex/AGENTS.md"
 link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.codex/AGENTS.local.md"
 link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.codex/skills/kuromoka-writing"
 
+# Antigravity CLI
+link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.gemini/config/skills/kuromoka-writing"
+
 # ~/.codex/agents/* — Codex agent profiles must be standalone files
 "$DOTFILES/codex/sync-agents.sh"
 

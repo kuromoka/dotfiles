@@ -14,6 +14,7 @@ bash install.sh
 
 - Homebrew / zsh-autosuggestions / Rust / pnpm / Vite+ のインストール（未導入の場合のみ）
 - [`natural-japanese`](https://github.com/coji/natural-japanese)スキルを取得し、Claude Code / Codexへインストール
+- `kuromoka-writing`スキルをClaude Code / Codex / Antigravity CLIへ配置
 - ほとんどの設定ファイルをホームディレクトリへシンボリックリンク（既存ファイルは `.bak` にバックアップ）
 - Codexのカスタムエージェントを`~/.codex/agents/`へ通常ファイルとして同期（既存ファイルは連番付き `.bak` にバックアップ）
 - Git の補完・プロンプトスクリプトを `~/.zsh/` にダウンロード
@@ -51,7 +52,7 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 | `opencode-rescue.md` | opencode CLI（`opencode run`）への手動委譲ルール。codex-rescue と同じ発想をプラグインなしで実現 |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
-| `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`は`install.sh`で外部から導入 |
+| `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。Claude Code / Codex / Antigravity CLIで共有する。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`は`install.sh`で外部から導入 |
 
 > **Note**: `settings.json` の SessionStart フックが呼ぶ `~/.claude/hooks/herdr-agent-state.sh` は、`herdr integration install claude` で自動生成・管理されるスクリプト（herdr の再インストール時に上書きされる）。このリポジトリでは管理しないため、herdr を使う環境では別途上記コマンドで導入する。
 
