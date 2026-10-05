@@ -2,135 +2,31 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+[ "$#" -eq 0 ] || { echo "Usage: $0" >&2; exit 1; }
+[ "$(uname -s)" = Darwin ] || { echo "This installer requires macOS. Use install-ubuntu.sh on Ubuntu." >&2; exit 1; }
+PLATFORM=macos
+export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
 
-link() {
-  local src="$1"
-  local dst="$2"
-
-  mkdir -p "$(dirname "$dst")"
-
-  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-    mv "$dst" "${dst}.bak"
-    echo "Backed up: $dst -> ${dst}.bak"
+# Prefer the user's PATH, then detect existing Apple Silicon / Intel installs.
+if ! command -v brew &>/dev/null; then
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
   fi
-
-  ln -sfn "$src" "$dst"
-  echo "Linked: $dst -> $src"
-}
-
-# Homebrew
+fi
 if ! command -v brew &>/dev/null; then
   echo "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
 fi
-
-# zsh-autosuggestions
+eval "$(brew shellenv)"
 if ! brew list zsh-autosuggestions &>/dev/null; then
-  echo "Installing zsh-autosuggestions..."
   brew install zsh-autosuggestions
 fi
 
-# Rust
-if ! command -v rustup &>/dev/null; then
-  echo "Installing Rust..."
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-fi
-
-# pnpm
-export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-if ! command -v pnpm &>/dev/null; then
-  echo "Installing pnpm..."
-  curl -fsSL https://get.pnpm.io/install.sh | sh -
-fi
-
-# Vite+
-if ! command -v vp &>/dev/null; then
-  echo "Installing Vite+..."
-  curl -fsSL https://vite.plus | bash
-fi
-
-# Agent Skills
-echo "Installing/updating natural-japanese..."
-pnpm dlx skills add coji/natural-japanese \
-  --global \
-  --agent claude-code codex \
-  --skill natural-japanese \
-  --yes
-
-# Home dotfiles
-link "$DOTFILES/.zshrc"            "$HOME/.zshrc"
-link "$DOTFILES/.zshenv"           "$HOME/.zshenv"
-link "$DOTFILES/.zprofile"         "$HOME/.zprofile"
-link "$DOTFILES/.gitconfig"        "$HOME/.gitconfig"
-link "$DOTFILES/.gitignore_global" "$HOME/.gitignore_global"
-link "$DOTFILES/.vimrc"            "$HOME/.vimrc"
-
-# ~/.config/*
-link "$DOTFILES/ghostty/config"           "$HOME/.config/ghostty/config"
-# Karabiner-Elements は保存時にファイルを rename で置き換えるため、ファイル単位のリンクは外れる。ディレクトリごとリンクする
-link "$DOTFILES/karabiner"                "$HOME/.config/karabiner"
-link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
-link "$DOTFILES/herdr/config.toml"        "$HOME/.config/herdr/config.toml"
-
-# Windows AutoHotkey settings are installed from Windows; they are not linked on macOS.
-echo "Windows IME switching: see autohotkey/realforce-ime.ahk and autohotkey/install.ps1."
-
-# ローカル上書きファイル（git 管理外）。無ければ雛形を作成
-if [ ! -f "$DOTFILES/claude/AGENTS.local.md" ]; then
-  cat > "$DOTFILES/claude/AGENTS.local.md" <<'LOCAL_EOF'
-# ローカル上書き（このマシン専用・git 管理外）
-# Claude Code / Codex 両方から読み込まれる。マシン固有のエージェント指示をここに書く。
-LOCAL_EOF
-  echo "Created: $DOTFILES/claude/AGENTS.local.md (machine-local, gitignored)"
-fi
-
-# ~/.claude/*
-link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"
-link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
-link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
-link "$DOTFILES/claude/AGENTS.md"             "$HOME/.claude/AGENTS.md"
-link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.claude/AGENTS.local.md"
-link "$DOTFILES/claude/codex-rescue.md"       "$HOME/.claude/codex-rescue.md"
-link "$DOTFILES/claude/model-delegate.md"     "$HOME/.claude/model-delegate.md"
-link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$HOME/.claude/skills/reload-rules/SKILL.md"
-link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.claude/skills/kuromoka-writing"
-
-# ~/.codex/* — AGENTS.md（汎用ルール）と AGENTS.local.md（ローカル上書き）を Claude と共有
-link "$DOTFILES/claude/AGENTS.md"             "$HOME/.codex/AGENTS.md"
-link "$DOTFILES/claude/AGENTS.local.md"       "$HOME/.codex/AGENTS.local.md"
-link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.codex/skills/kuromoka-writing"
-
-# Antigravity CLI
-link "$DOTFILES/claude/skills/kuromoka-writing" "$HOME/.gemini/config/skills/kuromoka-writing"
-
-# ~/.codex/agents/* — Codex agent profiles must be standalone files
-"$DOTFILES/codex/sync-agents.sh"
-
-# Git 補完・プロンプトスクリプトをダウンロード
-echo "Downloading git-prompt.sh and git-completion.bash..."
-BASE_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion"
-mkdir -p "$HOME/.zsh"
-curl -fsSL "$BASE_URL/git-prompt.sh"       -o "$HOME/.zsh/git-prompt.sh"
-curl -fsSL "$BASE_URL/git-completion.bash" -o "$HOME/.zsh/git-completion.bash"
-curl -fsSL "$BASE_URL/git-completion.zsh"  -o "$HOME/.zsh/_git"
-echo "Downloaded to ~/.zsh/"
-
-# .zshrc.local のセットアップ案内
-if [ ! -f "$HOME/.zshrc.local" ]; then
-  echo ""
-  echo "Note: ~/.zshrc.local not found. Create it to add machine-local secrets."
-fi
-
-# .gitconfig.local のセットアップ案内
-if [ ! -f "$HOME/.gitconfig.local" ]; then
-  echo ""
-  echo "Note: ~/.gitconfig.local not found. Create it to set your name and email."
-fi
-
-echo ""
-echo "Done."
+source "$DOTFILES/scripts/install-common.sh"

@@ -1,7 +1,7 @@
 alias ll="ls -la"
 export PATH="$HOME/.local/bin:$PATH"
 
-source ~/.zsh/git-prompt.sh
+[ -f "$HOME/.zsh/git-prompt.sh" ] && source "$HOME/.zsh/git-prompt.sh"
 fpath=(~/.zsh $fpath)
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 autoload -Uz compinit && compinit
@@ -10,12 +10,28 @@ GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUPSTREAM=auto
 setopt PROMPT_SUBST
-PS1='%F{green}%n@%m%f %F{cyan}%~%f %F{red}$(__git_ps1 "(%s)")%f\$ '
+if (( $+functions[__git_ps1] )); then
+  PS1='%F{green}%n@%m%f %F{cyan}%~%f %F{red}$(__git_ps1 "(%s)")%f\$ '
+else
+  PS1='%F{green}%n@%m%f %F{cyan}%~%f\$ '
+fi
 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+  autosuggestions=/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif command -v brew >/dev/null 2>&1; then
+  autosuggestions="$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+else
+  autosuggestions=/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+[ -f "$autosuggestions" ] && source "$autosuggestions"
+unset autosuggestions
 
 # pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
+if [[ "$(uname -s)" == Darwin ]]; then
+  export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+else
+  export PNPM_HOME="${PNPM_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/pnpm}"
+fi
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
