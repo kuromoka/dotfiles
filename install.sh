@@ -78,6 +78,9 @@ link "$DOTFILES/karabiner"                "$HOME/.config/karabiner"
 link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
 link "$DOTFILES/herdr/config.toml"        "$HOME/.config/herdr/config.toml"
 
+# Windows AutoHotkey settings are installed from Windows; they are not linked on macOS.
+echo "Windows IME switching: see autohotkey/realforce-ime.ahk and autohotkey/install.ps1."
+
 # ローカル上書きファイル（git 管理外）。無ければ雛形を作成
 if [ ! -f "$DOTFILES/claude/AGENTS.local.md" ]; then
   cat > "$DOTFILES/claude/AGENTS.local.md" <<'LOCAL_EOF'

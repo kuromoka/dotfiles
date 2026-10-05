@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS 用の設定ファイル一式。`install.sh` が設定ファイルの配置と依存ツールのインストールを行う。
+macOS と Windows 用の設定ファイル一式。`install.sh` が macOS の設定ファイル配置と依存ツールのインストールを行う。
 
 ## セットアップ
 
@@ -31,6 +31,7 @@ bash install.sh
 | `.tmux.conf` | tmux の設定 |
 | `ghostty/` | Ghostty（ターミナル）の設定 |
 | `karabiner/` | Karabiner-Elements（キーリマップ）の設定 |
+| `autohotkey/` | Windows 用の AutoHotkey 設定。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える |
 | `yazi/` | yazi（ファイラー）の設定 |
 | `herdr/` | herdr（エージェント多重化ターミナル）の設定 |
 | `claude/` | Claude Code の設定（下記） |
@@ -79,6 +80,26 @@ Codexのカスタムエージェントはsymlinkにせず、次のコマンド�
 ```sh
 ./codex/sync-agents.sh
 ```
+
+## Windows: REALFORCE for Mac の IME 切り替え
+
+`autohotkey/realforce-ime.ahk` は、英語配列の REALFORCE for Mac R2 テンキーレスを Windows モード（`Fn + End`）で使うための設定。日本語 Microsoft IME を有効にし、キーボード レイアウトは US にする。
+
+- 左 Command（`LWin`）を単独で 500 ms 以内に離すと IME をオフにする（英数）。Windows ショートカットはそのまま使える。
+- 右 Command（`AppsKey`）を単独で 500 ms 以内に離すと IME をオンにする（かな）。このキーは IME 専用になるため、コンテキストメニューは `Shift + F10` を使う。
+- 別のキーやマウスのクリック・スクロールとの組み合わせ、長押しでは IME を切り替えない。Ctrl への再割り当ては行わない。
+
+[AutoHotkey v2](https://www.autohotkey.com/) をインストールしてから、Windows の PowerShell でリポジトリのルートから次を実行する。現在のセッションだけで試す場合は `realforce-ime.ahk` を直接起動する。
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\autohotkey\install.ps1
+```
+
+このコマンドはユーザーごとのスタートアップにショートカットを作成する。自動起動をやめるには、そのスタートアップの `REALFORCE IME.lnk` を削除する。実行中のスクリプトは通知領域の AutoHotkey アイコンから `Exit` で停止できる。
+
+動作確認では、左 Command の単独押しを繰り返して IME がオフになり、右 Command の単独押しでオンになることを確認する。`Win + E`、`Win + R`、`Win + Space`、マウスのクリック・スクロールとの同時操作、ほかのキーとの組み合わせでは IME が切り替わらないことも確認する。
+
+仮想キーは [Microsoft の一覧](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes)、Windows モードのキー配置は [REALFORCE のマニュアル](https://www.realforce.co.jp/en/products/discontinued/R2TL-USVM-WH/REALFORCE_TKL_for_Mac_US_Manual.pdf)を参照している。Windows 実機での動作確認は macOS 上では行っていない。
 
 ## 機密情報の扱い
 
