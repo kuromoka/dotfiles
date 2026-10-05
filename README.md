@@ -28,7 +28,6 @@ bash install.sh
 | `.zshrc` / `.zshenv` / `.zprofile` | zsh の設定 |
 | `.gitconfig` / `.gitignore_global` | Git の設定 |
 | `.vimrc` | Vim の設定 |
-| `.tmux.conf` | tmux の設定 |
 | `ghostty/` | Ghostty（ターミナル）の設定 |
 | `karabiner/` | Karabiner-Elements（キーリマップ）の設定 |
 | `autohotkey/` | Windows 用の AutoHotkey 設定。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える |
@@ -36,7 +35,6 @@ bash install.sh
 | `herdr/` | herdr（エージェント多重化ターミナル）の設定 |
 | `claude/` | Claude Code の設定（下記） |
 | `codex/` | Codex CLI の設定（下記） |
-| `templates/` | プロジェクトへ配置する雛形（symlink せず `gh` で取得して使う）。`loop/` はループエンジニアリング用 |
 
 ### claude/
 
@@ -44,13 +42,12 @@ Claude Code / Codex 用の設定。主に `~/.claude/` 以下にリンクされ�
 
 | ファイル | 内容 |
 |---|---|
-| `settings.json` | 本体設定（permission mode、deny ルール、モデル、プラグイン等） |
+| `settings.json` | 本体設定（permission mode、deny ルール、プラグイン等） |
 | `statusline-command.sh` | ステータスライン表示スクリプト |
 | `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック・ユーザー名義の文章で使う文体スキル。`~/.claude/AGENTS.md` と `~/.codex/AGENTS.md` の両方にリンクされる |
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
 | `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。`~/.claude/AGENTS.local.md` / `~/.codex/AGENTS.local.md` にリンク。Claude は CLAUDE.md の `@AGENTS.local.md` ネイティブ import、Codex は `AGENTS.md` 内の自然言語指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
-| `opencode-rescue.md` | opencode CLI（`opencode run`）への手動委譲ルール。codex-rescue と同じ発想をプラグインなしで実現 |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
 | `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。Claude Code / Codex / Antigravity CLIで共有する。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`は`install.sh`で外部から導入 |
@@ -69,11 +66,11 @@ Codex CLI 用の設定。カスタムエージェントの TOML は `~/.codex/ag
 
 | パス | 内容 |
 |---|---|
-| `agents/implementer.toml` | 機械的な実装用エージェントプロファイル（gpt-5.6-terra / medium effort）。一括編集・スキャフォールド・マイグレーション等 |
-| `agents/researcher.toml` | 読み込み主体の調査用エージェントプロファイル（gpt-5.6-luna / low effort / read-only） |
+| `agents/implementer.toml` | 機械的な実装用エージェントプロファイル（gpt-6.1-sol / medium effort）。一括編集・スキャフォールド・マイグレーション等 |
+| `agents/researcher.toml` | 読み込み主体の調査用エージェントプロファイル（gpt-6.1-sol / low effort / read-only） |
 | `sync-agents.sh` | `agents/*.toml`を`~/.codex/agents/`へ通常ファイルとして同期 |
 
-メインモデル（gpt-5.6-sol）から下位モデルへ実装・調査を委譲するためのプロファイル。Claude Code の `model-delegate.md` と同じ思想を Codex のプロファイル方式で実現する。
+実装と調査を目的別に委譲するためのプロファイル。Claude Code の `model-delegate.md` と同じ思想を Codex のプロファイル方式で実現する。
 
 Codexのカスタムエージェントはsymlinkにせず、次のコマンドで同期する。プロファイルを変更した場合も再実行する。
 
