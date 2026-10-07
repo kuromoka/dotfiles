@@ -1,22 +1,24 @@
 # dotfiles
 
-macOS・Ubuntu・Windows 用の設定ファイル一式。macOS は `install.sh`、Ubuntu は `install-ubuntu.sh`、Windows は `install.ps1` で配置する。Windows の共有対象は Git・Claude Code・Codex の設定に絞る。
+macOS・Ubuntu・Windows 用の設定ファイル一式。macOS は `install.sh`、Ubuntu は `install-ubuntu.sh`、Windows は `install.ps1` で配置する。Windows の共有対象は Git・Claude Code・Codex の設定に絞る。配置先は全マシンで `~/projects/dotfiles` に統一する。Windows の `~` はユーザーのホームディレクトリ（PowerShell の `$HOME`）を指す。
 
 ## セットアップ
 
 ### macOS
 
 ```sh
-git clone https://github.com/kuromoka/dotfiles.git
-cd dotfiles
+mkdir -p ~/projects &&
+git clone https://github.com/kuromoka/dotfiles.git ~/projects/dotfiles &&
+cd ~/projects/dotfiles &&
 bash install.sh
 ```
 
 ### Ubuntu
 
 ```sh
-git clone https://github.com/kuromoka/dotfiles.git
-cd dotfiles
+mkdir -p ~/projects &&
+git clone https://github.com/kuromoka/dotfiles.git ~/projects/dotfiles &&
+cd ~/projects/dotfiles &&
 bash install-ubuntu.sh
 ```
 
@@ -38,8 +40,12 @@ Ubuntu では Git・zsh・Vim・jq・C/C++ のビルド環境も導入する。m
 Git for Windows・Claude Code・Codex を導入してから、PowerShell で実行する。
 
 ```powershell
-git clone https://github.com/kuromoka/dotfiles.git
-cd dotfiles
+$projects = Join-Path $HOME "projects"
+New-Item -ItemType Directory -Path $projects -Force -ErrorAction Stop | Out-Null
+$dotfiles = Join-Path $projects "dotfiles"
+git clone https://github.com/kuromoka/dotfiles.git $dotfiles
+if ($LASTEXITCODE -ne 0) { throw "git clone failed" }
+Set-Location $dotfiles -ErrorAction Stop
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
@@ -52,6 +58,32 @@ Claude の設定は共通の `claude/settings.json` から生成する。Windows
 Claude の配置先は `CLAUDE_CONFIG_DIR`、Codex は `CODEX_HOME` が設定されていればその値を使う。既定の配置先は、それぞれ `~/.claude` と `~/.codex`。[Claude の設定場所](https://code.claude.com/docs/en/settings)、[Codex の環境変数](https://learn.chatgpt.com/docs/config-file/environment-variables)
 
 macOS / Ubuntu でホーム外の配置先を指定する場合、親ディレクトリに独自のシンボリックリンクがあれば実パスを指定する。意図しないリンク先の変更を避けるため、そのような配置先は拒否する。
+
+## 更新
+
+各マシン上でリポジトリを `pull --ff-only` し、そのマシン用のインストーラーを再実行する。更新内容が分岐している場合は pull を停止するので、先に差分を確認する。
+
+macOS：
+
+```sh
+cd ~/projects/dotfiles && git pull --ff-only && bash install.sh
+```
+
+Ubuntu：
+
+```sh
+cd ~/projects/dotfiles && git pull --ff-only && bash install-ubuntu.sh
+```
+
+Windows（PowerShell）：
+
+```powershell
+Set-Location (Join-Path $HOME "projects/dotfiles") -ErrorAction Stop
+git pull --ff-only
+if ($LASTEXITCODE -eq 0) {
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+}
+```
 
 ## 構成
 
