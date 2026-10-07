@@ -6,3 +6,7 @@ karabiner/automatic_backups/
 
 # Karabiner の GUI インポート済みルール
 karabiner/assets/
+
+# Machine-local settings
+.zshrc.local
+.gitconfig.local

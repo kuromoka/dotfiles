@@ -57,3 +57,6 @@ function y() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	command rm -f -- "$tmp"
 }
+
+# Machine-local settings (not tracked in git)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
