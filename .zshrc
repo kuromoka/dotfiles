@@ -44,9 +44,6 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
-# Machine-local secrets (not tracked in git)
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
-
 
 # opencode
 export PATH=~/.opencode/bin:$PATH

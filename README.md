@@ -84,19 +84,12 @@ Claude Code / Codex 用の設定。macOS / Ubuntu はリンク、Windows はコ�
 | `statusline-command.sh` | ステータスライン表示スクリプト |
 | `AGENTS.md` | 汎用エージェント設定（Claude Code / Codex 共通）。git/GitHub 操作・新規プロジェクトのデフォルト技術スタック・ユーザー名義の文章で使う文体スキル。Claude / Codex の両方へ配置 |
 | `CLAUDE.md` | Claude 専用のグローバル指示（`AGENTS.md` と下記の各ルールを import） |
-| `AGENTS.local.md` | マシン固有のローカル上書き（git 管理外）。配置先に未存在の場合だけコピーまたは雛形を作成。Claude は `@AGENTS.local.md`、Codex は `AGENTS.md` の指示で読み込む |
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
 | `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。Claude Code / Codex / Antigravity CLIで共有する。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`はmacOS / Ubuntuのインストーラーで外部から導入 |
 
 > **Note**: `settings.json` の SessionStart フックが呼ぶ `~/.claude/hooks/herdr-agent-state.sh` は、`herdr integration install claude` で自動生成・管理されるスクリプト（herdr の再インストール時に上書きされる）。このリポジトリでは管理しないため、herdr を使う環境では別途上記コマンドで導入する。
-
-ローカル上書きの仕組み（ハイブリッド）:
-
-- **Claude Code**: `CLAUDE.md` が `@AGENTS.local.md` をネイティブ import（プロンプトに確実に展開）。
-- **Codex**: `@import` 非対応のため、共有 `AGENTS.md` に「Codex の場合は応答前に必ず `~/.codex/AGENTS.local.md` を読んで従え」と自然言語で指示し、エージェントがシェルで読み込む。
-- `AGENTS.local.md` は `.gitignore`（`*.local.md`）で除外。配置先の既存ファイルは変更しない。新規に配置した Claude / Codex のコピーは、必要に応じてそれぞれ編集する。
 
 ### codex/
 
@@ -120,11 +113,8 @@ Windows ではルートの `install.ps1` を再実行して同期する。
 
 ## インストール時の検証
 
-各インストーラーは、完了前に配置した設定を自動で検証する。ファイルの内容・リンク先、Codex エージェントが通常ファイルであること、既存のローカル設定が保持されていることを確認する。不一致があればエラーで終了し、対象のパスを表示する。別途検証コマンドを実行する必要はない。
+各インストーラーは、完了前に配置した設定を自動で検証する。ファイルの内容・リンク先、Codex エージェントが通常ファイルであること、既存の未管理ファイルが保持されていることを確認する。不一致があればエラーで終了し、対象のパスを表示する。別途検証コマンドを実行する必要はない。
 
 ## 機密情報の扱い
 
-シークレットや個人情報はリポジトリに含めず、ローカル専用ファイルに分離する：
-
-- `~/.zshrc.local` — API トークン等の環境変数（`.zshrc` から読み込まれる）
-- `~/.gitconfig.local` — Git の `name` / `email`（`.gitconfig` から include される）
+APIトークン・パスワード・個人情報を、設定ファイルやドキュメントに含めない。

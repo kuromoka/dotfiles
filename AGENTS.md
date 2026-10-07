@@ -4,15 +4,8 @@
 
 ## 機密情報・個人情報の扱い
 
-- APIトークン・パスワード等の秘密情報は `.zshrc` に直接書かない。`~/.zshrc.local` に書き、`.zshrc` では `[ -f ~/.zshrc.local ] && source ~/.zshrc.local` で読み込む。
-- Git の `name` / `email` は `.gitconfig` に書かない。`~/.gitconfig.local` に書き、`.gitconfig` では `[include] path = ~/.gitconfig.local` で読み込む。
-- `*.local` ファイルは `.gitignore` で除外済み。
-
-## ローカル専用ファイル（`*.local` 系）の扱い
-
-- `*.local` / `*.local.md` / `.claude/settings.local.json` などのローカル専用ファイルは `.gitignore` で除外済み。マシン固有・ローカル完結であり、リポジトリには含めない。
-- **これらに対する操作（作成・編集・リネーム等）や、これらに書く指示は、コミット・push しない**。ユーザーが明示的に要求した場合のみ例外とする。
-- ローカル専用ファイルを新規に作る場合は、`.gitignore` にマッチする名前（末尾 `.local` 等）にして tracked にならないようにする。
+- APIトークン・パスワード等の秘密情報を設定ファイルやドキュメントに書かない。
+- Git の `name` / `email` を共有設定ファイルに書かない。
 
 ## パスの書き方
 

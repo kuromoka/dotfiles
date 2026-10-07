@@ -90,7 +90,7 @@ function Ensure-Directory([string]$Path) {
         $backup = Backup-Item $Path
         [IO.Directory]::CreateDirectory($Path) | Out-Null
         if ($item.PSIsContainer) {
-            # Keep local/user files when replacing an existing directory link.
+            # Keep unmanaged files when replacing an existing directory link.
             Get-ChildItem -LiteralPath $backup -Force | ForEach-Object {
                 Copy-Item -LiteralPath $_.FullName -Destination $Path -Recurse -Force
             }
@@ -141,18 +141,6 @@ function Install-Tree([string]$Source, [string]$Destination) {
     }
 }
 
-function Initialize-LocalRules([string]$Root) {
-    Ensure-Directory $Root
-    $localRules = Join-Path $Root 'AGENTS.local.md'
-    if (Get-ExistingItem $localRules) { return }
-    $source = Join-Path $repoRoot 'claude/AGENTS.local.md'
-    if (Test-Path -LiteralPath $source -PathType Leaf) {
-        Install-File $source $localRules
-    } else {
-        Install-Bytes ([Text.UTF8Encoding]::new($false).GetBytes('# Machine-local rules. This file is not managed by the repository.' + "`n")) $localRules
-    }
-}
-
 function Find-GitBash {
     if (-not $isWindowsPlatform) { return $null }
     $candidates = @()
@@ -182,13 +170,7 @@ function ConvertTo-BashQuotedLiteral([string]$Value) {
     return "'" + $Value.Replace("'", $escapedQuote) + "'"
 }
 
-foreach ($path in @(
-    (Join-Path $destinationRoot '.gitconfig.local'),
-    (Join-Path $claudeRoot 'AGENTS.local.md'),
-    (Join-Path $claudeRoot 'settings.local.json'),
-    (Join-Path $codexRoot 'AGENTS.local.md'),
-    (Join-Path $codexRoot 'config.toml')
-)) { Preserve-Existing $path }
+Preserve-Existing (Join-Path $codexRoot 'config.toml')
 
 Ensure-Directory $destinationRoot
 foreach ($name in @('.gitconfig', '.gitignore_global')) {
@@ -204,8 +186,6 @@ Install-Tree (Join-Path $repoRoot 'claude/skills/kuromoka-writing') (Join-Path $
 Get-ChildItem -LiteralPath (Join-Path $repoRoot 'codex/agents') -Filter '*.toml' -File | ForEach-Object {
     Install-File $_.FullName (Join-Path $codexRoot "agents/$($_.Name)")
 }
-Initialize-LocalRules $claudeRoot
-Initialize-LocalRules $codexRoot
 
 $settings = Get-Content -LiteralPath (Join-Path $repoRoot 'claude/settings.json') -Raw | ConvertFrom-Json
 if ($settings.hooks -and $settings.hooks.SessionStart) {
@@ -240,7 +220,7 @@ function Verify-Installation {
     }
     foreach ($path in $preservedFiles.Keys) {
         if ((Get-ItemSignature $path) -cne $preservedFiles[$path]) {
-            throw "Existing local or unmanaged file changed: $path"
+            throw "Existing unmanaged file changed: $path"
         }
     }
     foreach ($path in $linkTargets.Keys) {
@@ -267,7 +247,4 @@ Write-Host 'Installation verification completed.'
 
 Write-Host 'Git for Windows, Claude Code and Codex must be installed separately. No software was installed.'
 Write-Host 'natural-japanese is not installed by this Windows installer; install it separately if needed.'
-if (-not (Test-Path -LiteralPath (Join-Path $destinationRoot '.gitconfig.local'))) {
-    Write-Host 'Create ~/.gitconfig.local yourself to configure Git name/email. Existing identity settings were not edited.'
-}
 Write-Host 'Done. Rerun this installer after changing repository settings; Windows uses copies.'

@@ -1,16 +1,8 @@
-# Machine-local secrets
-*.local
-*.local.md
-*.local.sh
-
 # macOS
 .DS_Store
 
 # Karabiner の自動生成ファイル
 karabiner/automatic_backups/
 
-# Claude Code のプロジェクトローカル設定
-.claude/settings.local.json
-
-# Karabiner の GUI インポート済みルール（マシンローカル）
+# Karabiner の GUI インポート済みルール
 karabiner/assets/

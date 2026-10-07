@@ -13,7 +13,7 @@ validation_error() {
   exit 1
 }
 
-# Keep signatures in memory; never print machine-local contents or checksums.
+# Keep signatures in memory; never print file contents or checksums.
 path_signature() {
   local path="$1"
   if [ -L "$path" ]; then
@@ -37,18 +37,15 @@ EXPECTED_SOURCES=()
 EXPECTED_DESTINATIONS=()
 PRESERVED_PATHS=()
 PRESERVED_SIGNATURES=()
-for local_path in "$HOME/.zshrc.local" "$HOME/.gitconfig.local" \
-    "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/AGENTS.local.md" \
-    "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.local.json" \
-    "${CODEX_HOME:-$HOME/.codex}/AGENTS.local.md" \
+for config_path in \
     "${CODEX_HOME:-$HOME/.codex}/config.toml"; do
-  if [ -e "$local_path" ] || [ -L "$local_path" ]; then
-    PRESERVED_PATHS+=("$local_path")
+  if [ -e "$config_path" ] || [ -L "$config_path" ]; then
+    PRESERVED_PATHS+=("$config_path")
     # Parent directory links are replaced with copies; preserve file contents.
-    if [ -f "$local_path" ]; then
-      PRESERVED_SIGNATURES+=("$(cksum < "$local_path")")
+    if [ -f "$config_path" ]; then
+      PRESERVED_SIGNATURES+=("$(cksum < "$config_path")")
     else
-      PRESERVED_SIGNATURES+=("$(path_signature "$local_path")")
+      PRESERVED_SIGNATURES+=("$(path_signature "$config_path")")
     fi
   fi
 done
@@ -194,26 +191,10 @@ link "$DOTFILES/herdr/config.toml"        "$HOME/.config/herdr/config.toml"
 # Windows AutoHotkey settings are installed from Windows, not from Unix.
 echo "Windows IME switching: see autohotkey/realforce-ime.ahk and autohotkey/install.ps1."
 
-# Machine-local rules live under HOME, never in the checkout.
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
-CLAUDE_LOCAL="$CLAUDE_DIR/AGENTS.local.md"
 CODEX_DIR="${CODEX_HOME:-$HOME/.codex}"
 ensure_directory "$CLAUDE_DIR"
 ensure_directory "$CODEX_DIR"
-if [ ! -e "$CLAUDE_LOCAL" ] && [ ! -L "$CLAUDE_LOCAL" ]; then
-  if [ -f "$DOTFILES/claude/AGENTS.local.md" ]; then
-    cp "$DOTFILES/claude/AGENTS.local.md" "$CLAUDE_LOCAL"
-  else
-    cat > "$CLAUDE_LOCAL" <<'LOCAL_EOF'
-# ローカル上書き（このマシン専用・git 管理外）
-# Claude Code / Codex 両方から読み込まれる。マシン固有のエージェント指示をここに書く。
-LOCAL_EOF
-  fi
-  echo "Created: $CLAUDE_LOCAL (machine-local)"
-fi
-if [ ! -e "$CODEX_DIR/AGENTS.local.md" ] && [ ! -L "$CODEX_DIR/AGENTS.local.md" ]; then
-  cp "$CLAUDE_LOCAL" "$CODEX_DIR/AGENTS.local.md"
-fi
 
 # ~/.claude/*
 link "$DOTFILES/claude/settings.json"         "$CLAUDE_DIR/settings.json"
@@ -225,7 +206,7 @@ link "$DOTFILES/claude/model-delegate.md"     "$CLAUDE_DIR/model-delegate.md"
 link "$DOTFILES/claude/skills/reload-rules/SKILL.md" "$CLAUDE_DIR/skills/reload-rules/SKILL.md"
 link "$DOTFILES/claude/skills/kuromoka-writing" "$CLAUDE_DIR/skills/kuromoka-writing"
 
-# ~/.codex/* — AGENTS.md（汎用ルール）と AGENTS.local.md（ローカル上書き）を Claude と共有
+# ~/.codex/* — AGENTS.md（汎用ルール）を Claude と共有
 link "$DOTFILES/claude/AGENTS.md"             "$CODEX_DIR/AGENTS.md"
 link "$DOTFILES/claude/skills/kuromoka-writing" "$CODEX_DIR/skills/kuromoka-writing"
 
@@ -243,18 +224,6 @@ ensure_directory "$HOME/.zsh"
 curl -fsSL "$BASE_URL/git-prompt.sh"       -o "$HOME/.zsh/git-prompt.sh"
 curl -fsSL "$BASE_URL/git-completion.bash" -o "$HOME/.zsh/git-completion.bash"
 curl -fsSL "$BASE_URL/git-completion.zsh"  -o "$HOME/.zsh/_git"
-
-# .zshrc.local のセットアップ案内
-if [ ! -f "$HOME/.zshrc.local" ]; then
-  echo ""
-  echo "Note: ~/.zshrc.local not found. Create it to add machine-local secrets."
-fi
-
-# .gitconfig.local のセットアップ案内
-if [ ! -f "$HOME/.gitconfig.local" ]; then
-  echo ""
-  echo "Note: ~/.gitconfig.local not found. Create it to set your name and email."
-fi
 
 validate_installation() {
   local index src dst file signature
@@ -290,18 +259,15 @@ validate_installation() {
   for dst in "$HOME/.zsh/git-prompt.sh" "$HOME/.zsh/git-completion.bash" "$HOME/.zsh/_git"; do
     [ -s "$dst" ] || validation_error "Git completion is empty or missing: $dst"
   done
-  for dst in "$CLAUDE_LOCAL" "$CODEX_DIR/AGENTS.local.md"; do
-    [ -f "$dst" ] || validation_error "local rules missing: $dst"
-  done
   for ((index=0; index<${#PRESERVED_PATHS[@]}; index++)); do
     dst="${PRESERVED_PATHS[$index]}"
-    [ -e "$dst" ] || [ -L "$dst" ] || validation_error "machine-local file missing: $dst"
+    [ -e "$dst" ] || [ -L "$dst" ] || validation_error "unmanaged file missing: $dst"
     if [ -f "$dst" ]; then
       signature="$(cksum < "$dst")"
     else
       signature="$(path_signature "$dst")"
     fi
-    [ "$signature" = "${PRESERVED_SIGNATURES[$index]}" ] || validation_error "machine-local file changed: $dst"
+    [ "$signature" = "${PRESERVED_SIGNATURES[$index]}" ] || validation_error "unmanaged file changed: $dst"
   done
   echo "Installation checks passed."
 }
