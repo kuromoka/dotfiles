@@ -34,6 +34,18 @@ macOS でホーム外の配置先を指定する場合、親ディレクトリ�
 
 Git for Windows と AutoHotkey v2 を導入してから、PowerShell で専用スクリプトを実行する。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える設定を、スタートアップに登録する。
 
+| 操作 | 動作 |
+|---|---|
+| 左 Command を単独で短く押す | IME オフ（英数入力） |
+| 右 Command を単独で短く押す | IME オン（日本語入力） |
+| Command と別のキーを同時に押す | Windows キーのショートカット（例：Command + E でエクスプローラー） |
+
+単独押しは500ms以内で、ほかのキーを押したり、マウスのボタン・ホイールを操作したりしない場合に判定する。左右Commandの単独押しではスタートメニューを開かない。スタートメニューは Ctrl + Esc で開ける。
+
+左Commandが `LWin`、右Commandが `RWin` として認識される配置に対応する。キーボードのモードによって右Commandが `AppsKey` として認識される場合もIMEオンに対応するが、その場合の右CommandはIME切り替え専用になる。
+
+インストーラーはスタートアップへの登録だけを行い、AutoHotkeyをその場では起動しない。次回Windowsログイン時に自動起動する。すぐに使う場合は、エクスプローラーから `autohotkey/realforce-ime.ahk` をダブルクリックして起動する。
+
 ```powershell
 $projects = Join-Path $HOME "projects"
 New-Item -ItemType Directory -Path $projects -Force -ErrorAction Stop | Out-Null
@@ -66,6 +78,8 @@ if ($LASTEXITCODE -eq 0) {
 }
 ```
 
+実行中のAutoHotkeyへ更新を反映するには、Windows画面の通知領域にあるAutoHotkeyアイコンから `Reload Script` を選ぶか、エクスプローラーから `autohotkey/realforce-ime.ahk` を再度起動する。次回ログイン時にも更新後の設定が読み込まれる。
+
 ## 構成
 
 | パス | 内容 |
@@ -79,7 +93,7 @@ if ($LASTEXITCODE -eq 0) {
 | `.vimrc` | Vim の設定 |
 | `ghostty/` | Ghostty（ターミナル）の設定 |
 | `karabiner/` | Karabiner-Elements（キーリマップ）の設定 |
-| `autohotkey/` | Windows 用の AutoHotkey 設定。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える |
+| `autohotkey/` | Windows 用の AutoHotkey 設定。左Command単押しでIMEオフ、右Command単押しでIMEオン。専用インストーラーでスタートアップに登録 |
 | `yazi/` | yazi（ファイラー）の設定 |
 | `herdr/` | herdr（エージェント多重化ターミナル）の設定 |
 | `claude/` | Claude Code の設定（下記） |
