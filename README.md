@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS 用の設定ファイル一式。MacBook・Mac mini で `install.sh` を使って配置する。配置先は `~/projects/dotfiles` に統一する。Windows 用には AutoHotkey の入力切り替え設定だけを残す。
+macOS 用の設定ファイル一式。macOS では `install.sh` を使って配置する。配置先は `~/projects/dotfiles` に統一する。Windows 用には AutoHotkey の入力切り替え設定だけを残す。
 
 ## セットアップ
 
@@ -30,7 +30,7 @@ Claude の配置先は `CLAUDE_CONFIG_DIR`、Codex は `CODEX_HOME` が設定さ
 
 macOS でホーム外の配置先を指定する場合、親ディレクトリに独自のシンボリックリンクがあれば実パスを指定する。意図しないリンク先の変更を避けるため、そのような配置先は拒否する。
 
-### Windows の AutoHotkey
+### Windows
 
 Git for Windows と AutoHotkey v2 を導入してから、PowerShell で専用スクリプトを実行する。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える設定を、スタートアップに登録する。
 
@@ -60,7 +60,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\autohotkey\install.ps1
 
 ## 更新
 
-MacBook・Mac mini の各マシン上でリポジトリを `pull --ff-only` し、`install.sh` を再実行する。更新内容が分岐している場合は pull を停止するので、先に差分を確認する。
+macOS の各マシン上でリポジトリを `pull --ff-only` し、`install.sh` を再実行する。更新内容が分岐している場合は pull を停止するので、先に差分を確認する。
 
 macOS：
 
