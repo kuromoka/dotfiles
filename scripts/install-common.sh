@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Shared implementation; run the platform-specific installer instead.
+# macOS implementation; run install.sh instead.
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
-  echo "Run install.sh or install-ubuntu.sh instead." >&2
+  echo "Run install.sh instead." >&2
   exit 1
 fi
 
@@ -163,33 +163,11 @@ link "$DOTFILES/.gitignore_global" "$HOME/.gitignore_global"
 link "$DOTFILES/.vimrc"            "$HOME/.vimrc"
 
 # ~/.config/*
-if [ "$PLATFORM" = macos ]; then
-  link "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
-else
-  # Linux gets a regular file without macOS-only Ghostty options.
-  GHOSTTY_CONFIG="$HOME/.config/ghostty/config"
-  ensure_directory "$(dirname "$GHOSTTY_CONFIG")"
-  GHOSTTY_TMP="$(mktemp)"
-  trap 'rm -f "$GHOSTTY_TMP"' EXIT
-  awk '!/^[[:space:]]*(macos-option-as-alt|macos-titlebar-style|window-save-state)[[:space:]]*=/' \
-    "$DOTFILES/ghostty/config" > "$GHOSTTY_TMP"
-  if [ -L "$GHOSTTY_CONFIG" ] || ! cmp -s "$GHOSTTY_TMP" "$GHOSTTY_CONFIG"; then
-    backup_existing "$GHOSTTY_CONFIG"
-    install -m 0644 "$GHOSTTY_TMP" "$GHOSTTY_CONFIG"
-    echo "Installed: $GHOSTTY_CONFIG (Ubuntu)"
-  fi
-  rm -f "$GHOSTTY_TMP"
-  trap - EXIT
-fi
+link "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
 # Karabiner-Elements は保存時にファイルを rename で置き換えるため、ファイル単位のリンクは外れる。ディレクトリごとリンクする
-if [ "$PLATFORM" = macos ]; then
-  link "$DOTFILES/karabiner" "$HOME/.config/karabiner"
-fi
+link "$DOTFILES/karabiner" "$HOME/.config/karabiner"
 link "$DOTFILES/yazi/yazi.toml"           "$HOME/.config/yazi/yazi.toml"
 link "$DOTFILES/herdr/config.toml"        "$HOME/.config/herdr/config.toml"
-
-# Windows AutoHotkey settings are installed from Windows, not from Unix.
-echo "Windows IME switching: see autohotkey/realforce-ime.ahk and autohotkey/install.ps1."
 
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 CODEX_DIR="${CODEX_HOME:-$HOME/.codex}"
@@ -244,13 +222,6 @@ validate_installation() {
       validation_error "installed file differs: $dst"
     fi
   done
-  if [ "$PLATFORM" = ubuntu ]; then
-    [ -f "$GHOSTTY_CONFIG" ] && [ ! -L "$GHOSTTY_CONFIG" ] || validation_error "Ghostty must be a regular file: $GHOSTTY_CONFIG"
-    cmp -s <(awk '!/^[[:space:]]*(macos-option-as-alt|macos-titlebar-style|window-save-state)[[:space:]]*=/' "$DOTFILES/ghostty/config") "$GHOSTTY_CONFIG" || validation_error "Ubuntu Ghostty content differs: $GHOSTTY_CONFIG"
-    if grep -Eq '^[[:space:]]*(macos-option-as-alt|macos-titlebar-style|window-save-state)[[:space:]]*=' "$GHOSTTY_CONFIG"; then
-      validation_error "macOS option in Ubuntu Ghostty: $GHOSTTY_CONFIG"
-    fi
-  fi
   for src in "$DOTFILES/codex/agents/"*.toml; do
     [ -e "$src" ] || continue
     dst="$CODEX_DIR/agents/$(basename "$src")"

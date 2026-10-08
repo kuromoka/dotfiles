@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS・Ubuntu・Windows 用の設定ファイル一式。macOS は `install.sh`、Ubuntu は `install-ubuntu.sh`、Windows は `install.ps1` で配置する。Windows の共有対象は Git・Claude Code・Codex の設定に絞る。配置先は全マシンで `~/projects/dotfiles` に統一する。Windows の `~` はユーザーのホームディレクトリ（PowerShell の `$HOME`）を指す。
+macOS 用の設定ファイル一式。MacBook・Mac mini で `install.sh` を使って配置する。配置先は `~/projects/dotfiles` に統一する。Windows 用には AutoHotkey の入力切り替え設定だけを残す。
 
 ## セットアップ
 
@@ -13,31 +13,26 @@ cd ~/projects/dotfiles &&
 bash install.sh
 ```
 
-### Ubuntu
+`install.sh` は以下を行う：
 
-```sh
-mkdir -p ~/projects &&
-git clone https://github.com/kuromoka/dotfiles.git ~/projects/dotfiles &&
-cd ~/projects/dotfiles &&
-bash install-ubuntu.sh
-```
-
-macOS / Ubuntu のインストーラーは以下を行う：
-
-- macOS は Homebrew と zsh-autosuggestions、Ubuntu は apt で基本ツールと zsh-autosuggestions を導入
+- Homebrew と zsh-autosuggestions を導入
 - Rust / pnpm / Vite+ のインストール（未導入の場合のみ）
 - [`natural-japanese`](https://github.com/coji/natural-japanese)スキルを取得し、Claude Code / Codexへインストール
 - `kuromoka-writing`スキルをClaude Code / Codex / Antigravity CLIへ配置
 - ほとんどの設定ファイルをホームディレクトリへシンボリックリンク（異なる既存ファイルは連番付き `.bak` にバックアップ）
-- Karabiner は macOS のみ配置。Ubuntu の Ghostty 設定では macOS 専用項目を除外
+- Ghostty と Karabiner の設定を配置
 - Codexのカスタムエージェントを`~/.codex/agents/`へ通常ファイルとして同期（既存ファイルは連番付き `.bak` にバックアップ）
 - Git の補完・プロンプトスクリプトを `~/.zsh/` にダウンロード
 
-Ubuntu では Git・zsh・Vim・jq・C/C++ のビルド環境も導入する。macOS では必要なツールを別途導入する。Ghostty・Yazi・Herdr・Karabiner・Claude Code・Codex などのアプリ本体は、このスクリプトでは導入しない。Ubuntu では apt 実行時に管理者権限が必要になる。ログインシェルの変更は行わない。
+必要なツールは別途導入する。Ghostty・Yazi・Herdr・Karabiner・Claude Code・Codex などのアプリ本体は、このスクリプトでは導入しない。ログインシェルの変更は行わない。
 
-### Windows
+Claude の配置先は `CLAUDE_CONFIG_DIR`、Codex は `CODEX_HOME` が設定されていればその値を使う。既定の配置先は、それぞれ `~/.claude` と `~/.codex`。[Claude の設定場所](https://code.claude.com/docs/en/settings)、[Codex の環境変数](https://learn.chatgpt.com/docs/config-file/environment-variables)
 
-Git for Windows・Claude Code・Codex を導入してから、PowerShell で実行する。
+macOS でホーム外の配置先を指定する場合、親ディレクトリに独自のシンボリックリンクがあれば実パスを指定する。意図しないリンク先の変更を避けるため、そのような配置先は拒否する。
+
+### Windows の AutoHotkey
+
+Git for Windows と AutoHotkey v2 を導入してから、PowerShell で専用スクリプトを実行する。REALFORCE for Mac の Command キー単独押しで Microsoft IME を切り替える設定を、スタートアップに登録する。
 
 ```powershell
 $projects = Join-Path $HOME "projects"
@@ -46,22 +41,14 @@ $dotfiles = Join-Path $projects "dotfiles"
 git clone https://github.com/kuromoka/dotfiles.git $dotfiles
 if ($LASTEXITCODE -ne 0) { throw "git clone failed" }
 Set-Location $dotfiles -ErrorAction Stop
-powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\autohotkey\install.ps1
 ```
 
-`install.ps1` は Git 設定、Claude Code のルール・スキル・設定、Codex のルール・スキル・エージェントをコピーする。異なる既存ファイルは連番付き `.bak` に退避し、同じ内容なら変更しない。管理者権限やシンボリックリンクの作成権限は不要。リポジトリを更新した後は再実行して反映する。
-
-Claude の設定は共通の `claude/settings.json` から生成する。Windows では Herdr 用のフックを除外する。Git Bash と jq が使える場合はステータスラインを有効にし、使えない場合は無効にして案内を表示する。jq を追加した後は再実行する。
-
-ソフト本体、プラグイン、外部の `natural-japanese` スキルの導入やログインは行わない。AutoHotkey の入力切り替えは `autohotkey/install.ps1` で別途設定する。
-
-Claude の配置先は `CLAUDE_CONFIG_DIR`、Codex は `CODEX_HOME` が設定されていればその値を使う。既定の配置先は、それぞれ `~/.claude` と `~/.codex`。[Claude の設定場所](https://code.claude.com/docs/en/settings)、[Codex の環境変数](https://learn.chatgpt.com/docs/config-file/environment-variables)
-
-macOS / Ubuntu でホーム外の配置先を指定する場合、親ディレクトリに独自のシンボリックリンクがあれば実パスを指定する。意図しないリンク先の変更を避けるため、そのような配置先は拒否する。
+既に `~/projects/dotfiles` に取得済みの場合は、取得手順を省略して専用スクリプトを実行する。PowerShell の `~` は `$HOME` を指す。AutoHotkey の実行ファイルを自動検出できない場合は、`-AutoHotkeyPath <path-to-AutoHotkey.exe>` を指定する。
 
 ## 更新
 
-各マシン上でリポジトリを `pull --ff-only` し、そのマシン用のインストーラーを再実行する。更新内容が分岐している場合は pull を停止するので、先に差分を確認する。
+MacBook・Mac mini の各マシン上でリポジトリを `pull --ff-only` し、`install.sh` を再実行する。更新内容が分岐している場合は pull を停止するので、先に差分を確認する。
 
 macOS：
 
@@ -69,19 +56,13 @@ macOS：
 cd ~/projects/dotfiles && git pull --ff-only && bash install.sh
 ```
 
-Ubuntu：
-
-```sh
-cd ~/projects/dotfiles && git pull --ff-only && bash install-ubuntu.sh
-```
-
-Windows（PowerShell）：
+Windows で AutoHotkey 設定を更新する場合は、PowerShell で次を実行する。
 
 ```powershell
 Set-Location (Join-Path $HOME "projects/dotfiles") -ErrorAction Stop
 git pull --ff-only
 if ($LASTEXITCODE -eq 0) {
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\autohotkey\install.ps1
 }
 ```
 
@@ -92,9 +73,7 @@ if ($LASTEXITCODE -eq 0) {
 | `AGENTS.md` | このリポジトリ固有のClaude Code / Codex共通ルール |
 | `CLAUDE.md` | `AGENTS.md`へのClaude Code互換symlink |
 | `install.sh` | macOS の依存ツール導入・設定配置 |
-| `install-ubuntu.sh` | Ubuntu の依存ツール導入・設定配置 |
-| `install.ps1` | Windows の Git・Claude Code・Codex 設定配置 |
-| `scripts/install-common.sh` | macOS / Ubuntu の共通導入・配置処理 |
+| `scripts/install-common.sh` | macOS の導入・配置処理 |
 | `.zshrc` / `.zshenv` / `.zprofile` | zsh の設定 |
 | `.gitconfig` / `.gitignore_global` | Git の設定 |
 | `.vimrc` | Vim の設定 |
@@ -108,7 +87,7 @@ if ($LASTEXITCODE -eq 0) {
 
 ### claude/
 
-Claude Code / Codex 用の設定。macOS / Ubuntu はリンク、Windows はコピーで配置する（`AGENTS.md` は Codex にも共有）。
+Claude Code / Codex 用の設定。macOS にリンクで配置する（`AGENTS.md` は Codex にも共有）。
 
 | ファイル | 内容 |
 |---|---|
@@ -119,7 +98,7 @@ Claude Code / Codex 用の設定。macOS / Ubuntu はリンク、Windows はコ�
 | `codex-rescue.md` | OpenAI Codex プラグインへの委譲ルール |
 | `model-delegate.md` | 下位モデルへの実装委譲ルール（Fable → Opus、Opus → Sonnet） |
 | `skills/reload-rules/` | CLAUDE.md を再読み込みするスキル |
-| `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。Claude Code / Codex / Antigravity CLIで共有する。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`はmacOS / Ubuntuのインストーラーで外部から導入 |
+| `skills/kuromoka-writing/` | 本人の希望と過去記事の傾向を絞り込み、本人らしい日本語で書く共通スキル。Claude Code / Codex / Antigravity CLIで共有する。`references/`の分析資料はスキルの見直し時だけ使う。`natural-japanese`はmacOSのインストーラーで外部から導入 |
 
 > **Note**: `settings.json` の SessionStart フックが呼ぶ `~/.claude/hooks/herdr-agent-state.sh` は、`herdr integration install claude` で自動生成・管理されるスクリプト（herdr の再インストール時に上書きされる）。このリポジトリでは管理しないため、herdr を使う環境では別途上記コマンドで導入する。
 
@@ -141,11 +120,9 @@ Codexのカスタムエージェントはsymlinkにせず、次のコマンド�
 ./codex/sync-agents.sh
 ```
 
-Windows ではルートの `install.ps1` を再実行して同期する。
-
 ## インストール時の検証
 
-各インストーラーは、完了前に配置した設定を自動で検証する。ファイルの内容・リンク先、Codex エージェントが通常ファイルであること、既存の未管理ファイルが保持されていることを確認する。不一致があればエラーで終了し、対象のパスを表示する。別途検証コマンドを実行する必要はない。
+`install.sh` は、完了前に配置した設定を自動で検証する。ファイルの内容・リンク先、Codex エージェントが通常ファイルであること、既存の未管理ファイルが保持されていることを確認する。不一致があればエラーで終了し、対象のパスを表示する。別途検証コマンドを実行する必要はない。
 
 ## 機密情報の扱い
 

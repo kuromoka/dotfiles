@@ -3,8 +3,7 @@ set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
 [ "$#" -eq 0 ] || { echo "Usage: $0" >&2; exit 1; }
-[ "$(uname -s)" = Darwin ] || { echo "This installer requires macOS. Use install-ubuntu.sh on Ubuntu." >&2; exit 1; }
-PLATFORM=macos
+[ "$(uname -s)" = Darwin ] || { echo "This installer requires macOS." >&2; exit 1; }
 export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
 
 # Prefer the user's PATH, then detect existing Apple Silicon / Intel installs.
