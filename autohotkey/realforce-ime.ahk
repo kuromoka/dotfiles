@@ -4,13 +4,14 @@ InstallKeybdHook()
 InstallMouseHook()
 A_MenuMaskKey := "vkE8"
 
-; REALFORCE for Mac R2 US TKL in Windows mode (Fn+End).
+; REALFORCE for Mac R2 US TKL. Command key codes depend on keyboard mode.
 ; Virtual-key reference: https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 ; Keyboard manual: https://www.realforce.co.jp/en/products/discontinued/R2TL-USVM-WH/REALFORCE_TKL_for_Mac_US_Manual.pdf
 
 tapLimitMs := 500
 tapState := Map(
     "LWin", { pending: false, startedAt: 0, cancelled: false },
+    "RWin", { pending: false, startedAt: 0, cancelled: false },
     "AppsKey", { pending: false, startedAt: 0, cancelled: false }
 )
 
@@ -21,11 +22,15 @@ keyWatcher.MinSendLevel := 101 ; Ignore keys sent by this script.
 keyWatcher.OnKeyDown := CancelForOtherKey
 keyWatcher.Start()
 
-; Left Command is LWin in Windows mode. Pass it through for Win shortcuts.
+; Left Command reports LWin. Pass it through for Win shortcuts.
 ~*LWin::BeginTap("LWin", 0x5B)
 ~*LWin Up::EndTap("LWin", "{vk1A}")
 
-; Right Command is AppsKey. It is dedicated to IME switching here.
+; Right Command can report RWin. Pass it through for Win shortcuts.
+~*RWin::BeginTap("RWin", 0x5C)
+~*RWin Up::EndTap("RWin", "{vk16}")
+
+; Retain AppsKey support for keyboard modes that report it for Right Command.
 *AppsKey::BeginTap("AppsKey", 0x5D)
 *AppsKey Up::EndTap("AppsKey", "{vk16}")
 
@@ -49,8 +54,8 @@ BeginTap(key, selfVk) {
 
     CancelOtherTap(key)
 
-    if key = "LWin"
-        Send "{Blind}{vkE8}" ; Prevent a lone LWin press from opening Start.
+    if key = "LWin" || key = "RWin"
+        Send "{Blind}{vkE8}" ; Prevent a lone Win press from opening Start.
 
     state.startedAt := A_TickCount
     state.pending := true
@@ -78,7 +83,9 @@ EndTap(key, imeKey) {
 }
 
 CancelForOtherKey(hook, vk, sc) {
-    if (vk = 0x5B && IsPending("LWin")) || (vk = 0x5D && IsPending("AppsKey"))
+    if (vk = 0x5B && IsPending("LWin"))
+        || (vk = 0x5C && IsPending("RWin"))
+        || (vk = 0x5D && IsPending("AppsKey"))
         return ; Ignore repeats of a pending key.
 
     CancelAllTaps()
